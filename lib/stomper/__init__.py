@@ -1,7 +1,8 @@
 """
-This is a python client implementation of the STOMP protocol. It aims
-to be transport layer neutral. This module provides functions to create
-and parse STOMP messages in a programatic fashion.
+This is a python client implementation of the STOMP protocol. 
+
+It aims to be transport layer neutral. This module provides functions to 
+create and parse STOMP messages in a programatic fashion.
 
 The examples package contains two examples using twisted as the transport 
 framework. Other frameworks can be used and I may add other examples as
@@ -11,8 +12,8 @@ The STOMP protocol specification maybe found here:
 
  * http://stomp.codehaus.org/Protocol
 
-I've looked and the stomp client by Jason R. Briggs and have based the message
-generation on how his client did it. The client can be found at the follow 
+I've looked at the stomp client by Jason R. Briggs and have based the message
+generation on how his client does it. The client can be found at the follow 
 address however it isn't a dependancy.
 
  * http://www.briggs.net.nz/log/projects/stomppy
