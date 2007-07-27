@@ -1,0 +1,39 @@
+Metadata-Version: 1.0
+Name: stomper
+Version: 0.1.0
+Summary: This is a transport neutral client implementation of the STOMP protocol.
+Home-page: UNKNOWN
+Author: Oisin Mulvihill
+Author-email: oisin dot mulvihill at gmail com
+License: http://www.apache.org/licenses/LICENSE-2.0
+Description: 
+        This is a python client implementation of the STOMP protocol. It aims
+        to be transport layer neutral. This module provides functions to create
+        and parse STOMP messages in a programatic fashion.
+        
+        The examples package contains two examples using twisted as the transport
+        framework. Other frameworks can be used and I may add other examples as
+        time goes on.
+        
+        The STOMP protocol specification maybe found here:
+        
+        * http://stomp.codehaus.org/Protocol
+        
+        I've looked and the stomp client by Jason R. Briggs and have based the message
+        generation on how his client did it. The client can be found at the follow
+        address however it isn't a dependancy.
+        
+        * http://www.briggs.net.nz/log/projects/stomppy
+        
+        In testing this library I run against ActiveMQ project. The server runs
+        in java, however its fairly standalone and easy to set up. The projects
+        page is here:
+        
+        * http://activemq.apache.org/
+        
+        
+        (c) Oisin Mulvihill, 2007-07-26.
+        License: http://www.apache.org/licenses/LICENSE-2.0
+        
+        
+Platform: UNKNOWN
