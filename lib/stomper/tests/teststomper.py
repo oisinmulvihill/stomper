@@ -29,6 +29,32 @@ class StomperTest(unittest.TestCase):
         """
         e = stomper.Engine()
 
+        # test session connected message:
+        msg = """CONNECTED
+session:ID:snorky.local-49191-1185461799654-3:18
+"""
+        result = stomper.unpack_frame(msg)
+        returned = e.react(result)
+        
+        self.assertEquals(returned, '')
+
+        # test message
+        e.doAck = True
+        
+        msg = """MESSAGE
+destination:/queue/a
+message-id: card_data
+
+hello queue a^@"""
+
+        result = stomper.unpack_frame(msg)
+        returned = e.react(result)
+        
+        correct = "ACK\nmessage-id: card_data\n\n\x00\n"
+        self.assertEquals(returned, correct)
+
+        
+        
     
     def testFrameUnpack2(self):
         """Testing unpack frame function against MESSAGE
