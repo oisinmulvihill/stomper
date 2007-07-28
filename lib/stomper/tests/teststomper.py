@@ -53,8 +53,56 @@ hello queue a^@"""
         correct = "ACK\nmessage-id: card_data\n\n\x00\n"
         self.assertEquals(returned, correct)
 
+    
+    def testFramepack1(self):
+        """Testing pack, unpacking and the Frame class.
+        """
+        # Check bad frame generation:
+        frame = stomper.Frame()        
+        def bad():
+            frame.cmd = 'SOME UNNOWN CMD'
+        self.assertRaises(stomper.FrameError, bad)
+
+        # Generate a MESSAGE frame:
+        frame = stomper.Frame()        
+        frame.cmd = 'MESSAGE'
+        frame.headers['destination'] = '/queue/a'
+        frame.headers['message-id'] = 'card_data'
+        frame.body = "hello queue"
+        result = frame.pack()
+
+        # Try bad message unpack catching:
+        bad_frame = stomper.Frame()        
+        self.assertRaises(stomper.FrameError, bad_frame.unpack, None)
+        self.assertRaises(stomper.FrameError, bad_frame.unpack, '')        
+
+        # Try to read the generated frame back in
+        # and then check the variables are set up
+        # correctly:
+        frame2 = stomper.Frame()        
+        frame2.unpack(result)
         
+        self.assertEquals(frame2.cmd, 'MESSAGE')
+        self.assertEquals(frame2.headers['destination'], '/queue/a')
+        self.assertEquals(frame2.headers['message-id'], 'card_data')
+        self.assertEquals(frame2.body, 'hello queue a')
+        result = frame2.pack()
+
+        correct = """MESSAGE
+destination:/queue/a
+message-id: card_data
+
+hello queue a^@"""
+
+        self.assertEquals(result, correct)
+
+        result = stomper.unpack_frame(result)
         
+        self.assertEquals(result['cmd'], 'MESSAGE')
+        self.assertEquals(result['headers']['destination'], '/queue/a')
+        self.assertEquals(result['headers']['message-id'], 'card_data')
+        self.assertEquals(result['body'], 'hello queue a')
+    
     
     def testFrameUnpack2(self):
         """Testing unpack frame function against MESSAGE

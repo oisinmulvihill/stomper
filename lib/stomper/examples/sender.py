@@ -24,12 +24,6 @@ class StompProtocol(Protocol, stomper.Engine):
         self.states['MESSAGE'] = self.message
 
 
-    def connect(self):
-        """Generate the STOMP connect command to get a session.
-        """
-        return stomper.connect(self.username, self.password)
-
-
     def connected(self, msg):
         """Once I've connected I want to subscribe to my the message queue.
         """
@@ -37,7 +31,7 @@ class StompProtocol(Protocol, stomper.Engine):
 
         print "Connected: session %s. Begining say hello." % msg['headers']['session']
         lc = LoopingCall(self.send)
-        lc.start(5, now=False)
+        lc.start(0.5)
         
         return stomper.subscribe(DESTINATION)
 
@@ -59,7 +53,7 @@ class StompProtocol(Protocol, stomper.Engine):
     def connectionMade(self):
         """Register with stomp server.
         """
-        cmd = self.connect()
+        cmd = stomper.connect(self.username, self.password)
         self.transport.write(cmd)
 
 
