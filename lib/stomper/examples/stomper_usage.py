@@ -112,12 +112,12 @@ print "1. send_message:\n%s\n" % pprint.pformat(send_message)
 
 # 2. using the frame class to add extra custom headers:
 msg = stomper.Frame()
-msg.cmd = 'MESSAGE'
-msg.headers = {'destination:':'/queue/a','message-id:':'some-message-id', 'custom-header' : '1234'}
+msg.cmd = 'SEND'
+msg.headers = {'destination':'/queue/a','custom-header':'1234'}
 msg.body = "hello queue a"
 print "2. send_message:\n%s\n" % pprint.pformat(msg.pack())
 
-#>>> 'MESSAGE\nmessage-id::some-message-id\ncustom-header:1234\ndestination::/queue/a\n\nhello queue a\n\n\x00\n'
+#>>> 'SEND\ncustom-header:1234\ndestination:/queue/a\n\nhello queue a\n\n\x00\n'
 
 
 # And thats pretty much it. There are other functions to send various 
