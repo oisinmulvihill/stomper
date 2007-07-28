@@ -12,5 +12,6 @@ lib/stomper/doc/stomper.stx
 lib/stomper/examples/__init__.py
 lib/stomper/examples/receiver.py
 lib/stomper/examples/sender.py
+lib/stomper/examples/stomper_usage.py
 lib/stomper/tests/__init__.py
 lib/stomper/tests/teststomper.py

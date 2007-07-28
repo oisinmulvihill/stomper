@@ -33,16 +33,17 @@ page is here:
 - `ActiveMQ <http://activemq.apache.org/>`_
 
 
+
+
 Examples
 --------
-
-The unit test "*tests/teststomper.py*" illustrates how to use all aspects of
-the code. However if this isn't y
 
 Basic Usage
 ~~~~~~~~~~~
 
-The following is a
+To see some basic code usage example see "*example/stomper_usage.py*". The unit test
+"*tests/teststomper.py*" illustrates how to use all aspects of the code. 
+
 
 Receive/Sender
 ~~~~~~~~~~~~~~

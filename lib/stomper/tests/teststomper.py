@@ -59,7 +59,7 @@ class StomperTest(unittest.TestCase):
         # React to a message which should be an ack:
         msg = stomper.Frame()
         msg.cmd = 'MESSAGE'
-        msg.headers = {'destination:':'/queue/a','message-id:':'card_data'}
+        msg.headers = {'destination:':'/queue/a','message-id:':'some-message-id'}
         msg.body = "hello queue a"
 
         rc = e.react(msg.pack())

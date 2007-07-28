@@ -39,7 +39,7 @@ ProjectScripts = [
 
 PackageData = {
     # If any package contains *.txt or *.rst files, include them:
-    '': ['*.txt', '*.rst', 'ini'],
+    'stomper': ['doc/*.stx',],
 }
 
 setup(
