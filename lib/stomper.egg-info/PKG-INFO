@@ -1,40 +1,53 @@
 Metadata-Version: 1.0
 Name: stomper
-Version: 0.1.0
+Version: 0.2.0
 Summary: This is a transport neutral client implementation of the STOMP protocol.
 Home-page: UNKNOWN
 Author: Oisin Mulvihill
 Author-email: oisin dot mulvihill at gmail com
 License: http://www.apache.org/licenses/LICENSE-2.0
-Description: 
+Description: =======
+        Stomper
+        =======
+        
+        .. content:
+        
+        :Author:
+        Oisin Mulvihill
+        
+        
+        Introduction
+        ------------
+        
         This is a python client implementation of the STOMP protocol.
         
-        It aims to be transport layer neutral. This module provides functions to
-        create and parse STOMP messages in a programatic fashion.
+        The client is attempting to be transport layer neutral. This module provides
+        functions to create and parse STOMP messages in a programatic fashion. The
+        messages can be easily generated and parsed, however its up to the user to do
+        the sending and receiving. The STOMP protocol specification can be found here:
         
-        The examples package contains two examples using twisted as the transport
-        framework. Other frameworks can be used and I may add other examples as
-        time goes on.
+        - `Stomp Protocol <http://stomp.codehaus.org/Protocol/>`_
         
-        The STOMP protocol specification maybe found here:
+        I've looked at the stomp client by Jason R. Briggs. I've based some of the
+        'function to message' generation on how his client does it. The client can
+        be found at the follow address however it isn't a dependancy.
         
-        * http://stomp.codehaus.org/Protocol
-        
-        I've looked at the stomp client by Jason R. Briggs and have based the message
-        generation on how his client does it. The client can be found at the follow
-        address however it isn't a dependancy.
-        
-        * http://www.briggs.net.nz/log/projects/stomppy
+        - `stompy <http://www.briggs.net.nz/log/projects/stomppy>`_
         
         In testing this library I run against ActiveMQ project. The server runs
         in java, however its fairly standalone and easy to set up. The projects
         page is here:
         
-        * http://activemq.apache.org/
+        - `ActiveMQ <http://activemq.apache.org/>`_
         
         
-        (c) Oisin Mulvihill, 2007-07-26.
-        License: http://www.apache.org/licenses/LICENSE-2.0
+        Examples
+        --------
+        
+        The example "*receiver.py*" and "*sender.py*" show how messages and generated and then
+        transmitted using the twisted framework. Other frameworks could be used instead.
+        The examples also demonstrate the state machine I used to determine a response
+        to received messages.
         
         
 Platform: UNKNOWN

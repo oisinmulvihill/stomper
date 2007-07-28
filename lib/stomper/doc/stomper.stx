@@ -1,0 +1,54 @@
+=======
+Stomper
+=======
+
+.. content:
+
+:Author: 
+    Oisin Mulvihill
+
+
+Introduction
+------------
+
+This is a python client implementation of the STOMP protocol. 
+
+The client is attempting to be transport layer neutral. This module provides 
+functions to create and parse STOMP messages in a programatic fashion. The 
+messages can be easily generated and parsed, however its up to the user to do
+the sending and receiving. The STOMP protocol specification can be found here:
+
+- `Stomp Protocol <http://stomp.codehaus.org/Protocol/>`_
+
+I've looked at the stomp client by Jason R. Briggs. I've based some of the 
+'function to message' generation on how his client does it. The client can 
+be found at the follow address however it isn't a dependancy.
+
+- `stompy <http://www.briggs.net.nz/log/projects/stomppy>`_
+
+In testing this library I run against ActiveMQ project. The server runs
+in java, however its fairly standalone and easy to set up. The projects
+page is here:
+
+- `ActiveMQ <http://activemq.apache.org/>`_
+
+
+Examples
+--------
+
+The unit test "*tests/teststomper.py*" illustrates how to use all aspects of
+the code. However if this isn't y
+
+Basic Usage
+~~~~~~~~~~~
+
+The following is a
+
+Receive/Sender
+~~~~~~~~~~~~~~
+
+The example "*receiver.py*" and "*sender.py*" show how messages and generated and then
+transmitted using the twisted framework. Other frameworks could be used instead. 
+The examples also demonstrate the state machine I used to determine a response
+to received messages.
+

@@ -16,41 +16,136 @@ address however it isn't a dependancy.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+import pprint
 import unittest
 
 import stomper
 
 
+class TestEngine(stomper.Engine):
+    """Test that these methods are called by the default engine.
+    """
+    def __init__(self):
+        super(TestEngine, self).__init__()
+        self.ackCalled = False
+        self.errorCalled = False
+        self.receiptCalled = False
+
+    def ack(self, msg):
+        super(TestEngine, self).ack(msg)
+        self.ackCalled = True
+        return 'ack'
+
+    def error(self, msg):
+        super(TestEngine, self).error(msg)
+        self.errorCalled = True
+        return 'error'
+
+    def receipt(self, msg):
+        super(TestEngine, self).receipt(msg)
+        self.receiptCalled = True
+        return 'receipt'
+
+
+
 class StomperTest(unittest.TestCase):
 
 
-    def testEngine(self):
-        """Test the basic state machine responses.
+    def testEngineToServerMessages(self):
+        """Test the state machines reaction
         """
-        e = stomper.Engine()
+        e = TestEngine()
+
+        # React to a message which should be an ack:
+        msg = stomper.Frame()
+        msg.cmd = 'MESSAGE'
+        msg.headers = {'destination:':'/queue/a','message-id:':'card_data'}
+        msg.body = "hello queue a"
+
+        rc = e.react(msg.pack())
+        self.assertEquals(rc, 'ack')
+        self.assertEquals(e.ackCalled, True)
+
+        # React to an error:
+        error = stomper.Frame()
+        error.cmd = 'ERROR'
+        error.headers = {'mesage:':'malformed packet received!'}
+        error.body = """The message:
+-----
+MESSAGE
+destined:/queue/a
+
+Hello queue a!
+-----
+Did not contain a destination header, which is required for message propagation.        
+\x00
+        """
+
+        rc = e.react(error.pack())
+        self.assertEquals(rc, 'error')
+        self.assertEquals(e.errorCalled, True)
+
+        # React to an receipt:
+        receipt = stomper.Frame()
+        receipt.cmd = 'RECEIPT'
+        receipt.headers = {'receipt-id:':'message-12345'}
+        
+        rc = e.react(receipt.pack())
+        self.assertEquals(rc, 'receipt')
+        self.assertEquals(e.receiptCalled, True)
+
+
+    def testEngine(self):
+        """Test the basic state machine.
+        """
+        e = stomper.Engine(testing=True)
 
         # test session connected message:
         msg = """CONNECTED
 session:ID:snorky.local-49191-1185461799654-3:18
+
+\x00
 """
         result = stomper.unpack_frame(msg)
+        correct = ''
         returned = e.react(result)
-        
-        self.assertEquals(returned, '')
+        self.assertEquals(returned, correct)
 
-        # test message
-        e.doAck = True
-        
+
+        # test message:
         msg = """MESSAGE
-destination:/queue/a
-message-id: card_data
+destination: /queue/a
+message-id: some-message-id
 
-hello queue a^@"""
+hello queue a
 
-        result = stomper.unpack_frame(msg)
-        returned = e.react(result)
+\x00
+"""
+        returned = e.react(msg)
+        correct = 'ACK\nmessage-id: some-message-id\n\n\x00\n'
+        self.assertEquals(returned, correct)
+
         
-        correct = "ACK\nmessage-id: card_data\n\n\x00\n"
+        # test error:
+        msg = """ERROR
+message:some error
+
+There was a problem with your last message
+
+\x00
+"""
+        returned = e.react(msg)
+        correct = 'error'
+        self.assertEquals(returned, correct)
+        
+        # test receipt:
+        msg = """RECEIPT
+message-id: some-message-id
+
+\x00
+"""
+        returned = e.react(msg)
+        correct = 'receipt'
         self.assertEquals(returned, correct)
 
     
@@ -68,8 +163,12 @@ hello queue a^@"""
         frame.cmd = 'MESSAGE'
         frame.headers['destination'] = '/queue/a'
         frame.headers['message-id'] = 'card_data'
-        frame.body = "hello queue"
+        frame.body = "hello queue a"
         result = frame.pack()
+        
+#        print "\n-- result " + "----" * 10
+#        pprint.pprint(result)
+#        print
 
         # Try bad message unpack catching:
         bad_frame = stomper.Frame()        
@@ -88,11 +187,14 @@ hello queue a^@"""
         self.assertEquals(frame2.body, 'hello queue a')
         result = frame2.pack()
 
-        correct = """MESSAGE
-destination:/queue/a
-message-id: card_data
-
-hello queue a^@"""
+        correct = "MESSAGE\ndestination:/queue/a\nmessage-id:card_data\n\nhello queue a\n\n\x00\n"
+        
+#        print "result: "
+#        pprint.pprint(result)
+#        print
+#        print "correct: "
+#        pprint.pprint(correct)
+#        print 
 
         self.assertEquals(result, correct)
 
@@ -111,7 +213,7 @@ hello queue a^@"""
 destination:/queue/a
 message-id: card_data
 
-hello queue a^@"""
+hello queue a"""
 
         result = stomper.unpack_frame(msg)
         
@@ -121,7 +223,7 @@ hello queue a^@"""
         self.assertEquals(result['body'], 'hello queue a')
     
     
-    def testFrameUnpack1(self):
+    def testFrameUnpack3(self):
         """Testing unpack frame function against CONNECTED
         """
         msg = """CONNECTED
@@ -132,6 +234,24 @@ session:ID:snorky.local-49191-1185461799654-3:18
         self.assertEquals(result['cmd'], 'CONNECTED')
         self.assertEquals(result['headers']['session'], 'ID:snorky.local-49191-1185461799654-3:18')
         self.assertEquals(result['body'], '')
+    
+    
+    def testBugInFrameUnpack1(self):
+        msg = """MESSAGE
+destination:/queue/a
+message-id: card_data
+
+hello queue a
+
+\x00
+"""
+        result = stomper.unpack_frame(msg)
+        
+        self.assertEquals(result['cmd'], 'MESSAGE')
+        self.assertEquals(result['headers']['destination'], '/queue/a')
+        self.assertEquals(result['headers']['message-id'], 'card_data')
+        self.assertEquals(result['body'], 'hello queue a')
+
 
     def testCommit(self):        
         transactionid = '1234'

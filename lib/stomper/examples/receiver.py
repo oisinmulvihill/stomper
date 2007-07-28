@@ -18,7 +18,6 @@ class MyStomp(stomper.Engine):
         super(MyStomp, self).__init__()
         self.username = username
         self.password = password
-        self.states['MESSAGE'] = self.message
 
 
     def connect(self):
@@ -36,10 +35,10 @@ class MyStomp(stomper.Engine):
         return stomper.subscribe(DESTINATION)
 
         
-    def message(self, msg):
+    def ack(self, msg):
         """Process the message and determine what to do with it.
         """
-        print "received: ", msg['body']
+        print "RECEIVER - received: ", msg['body']
         return stomper.NO_REPONSE_NEEDED
         
 

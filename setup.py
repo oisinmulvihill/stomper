@@ -6,23 +6,32 @@ Stomper distutils file.
 
 """
 import sys
+import logging
 from setuptools import setup, find_packages
 
 sys.path.insert(0,'lib')
 import stomper
 
 Name='stomper'
-#ProjecUrl="http://www.sourceweaver.com/autoconnect"
-Version='0.1.0'
+#ProjecUrl="http://www.sourceweaver.com/stomper"
+Version='0.2.0'
 Author='Oisin Mulvihill'
 AuthorEmail='oisin dot mulvihill at gmail com'
 Maintainer=' Oisin Mulvihill'
 Summary='This is a transport neutral client implementation of the STOMP protocol.'
 License='http://www.apache.org/licenses/LICENSE-2.0'
 ShortDescription="This is a transport neutral client implementation of the STOMP protocol."
-Description=stomper.__doc__
+
+# Recover the ReStructuredText docs:
+fd = file(stomper.doc.documentation)
+Description=fd.read()
+fd.close()
 
 TestSuite = 'stomper.tests'
+
+# stop any logger not found messages  if tests are run.
+stomper.utils.log_init(logging.CRITICAL)
+
 
 ProjectScripts = [
 #    '',

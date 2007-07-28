@@ -18,10 +18,8 @@ class StompProtocol(Protocol, stomper.Engine):
 
     def __init__(self, username='', password=''):
         stomper.Engine.__init__(self)
-
         self.username = username
         self.password = password
-        self.states['MESSAGE'] = self.message
 
 
     def connected(self, msg):
@@ -31,15 +29,17 @@ class StompProtocol(Protocol, stomper.Engine):
 
         print "Connected: session %s. Begining say hello." % msg['headers']['session']
         lc = LoopingCall(self.send)
-        lc.start(0.5)
+        lc.start(1)
         
         return stomper.subscribe(DESTINATION)
 
         
-    def message(self, msg):
-        """Process the message and determine what to do with it.
+    def ack(self, msg):
+        """Processes the received message. I don't need to 
+        generate an ack message.
+        
         """
-        print "Sender received: ", msg['body']
+        print "SENDER - received: ", msg['body']
         return stomper.NO_REPONSE_NEEDED
 
 

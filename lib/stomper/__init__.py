@@ -31,6 +31,12 @@ License: http://www.apache.org/licenses/LICENSE-2.0
 """
 import re
 import uuid
+import types
+import logging
+
+
+import doc
+import utils
 
 # This is used as a return from message reponses functions.
 # It is used more for readability more then anything or reason.
@@ -38,16 +44,23 @@ NO_REPONSE_NEEDED = ''
 
 
 # The version of the protocol we implement.
-stomp_version = '1.0'
+STOMP_VERSION = '1.0'
 
+# Message terminator:
+NULL = '\x00'
 
 # STOMP Spec v1.0 valid commands:
 VALID_COMMANDS = [
     'ABORT', 'ACK', 'BEGIN', 'COMMIT', 
     'CONNECT', 'DISCONNECT', 'MESSAGE', 
-    'SEND', 'SUBSCRIBE', 'UNSUBSCRIBE'
+    'SEND', 'SUBSCRIBE', 'UNSUBSCRIBE',
+    'RECEIPT', 'ERROR',    
 ]
 
+
+def get_log():
+    return logging.getLogger("stomper")
+    
 
 class FrameError(Exception):
     """Raise for problem with frame generation or parsing.
@@ -79,18 +92,14 @@ class Frame(object):
     if needed. There are no restrictions or checks imposed on 
     what values are inserted.
     
-    The 'body' is a property which is used to add the message
-    body through. The STOMP null (^@) is automatically appended
-    and removed transparently to the user. Note: the body must 
-    be a string.
+    The 'body' is just a member variable that the body text 
+    is assigned to. 
     
-    """
-    NULL = '\x00'
-    
+    """    
     def __init__(self):
         """Setup the internal state."""
         self._cmd = ''
-        self._body = ''
+        self.body = ''
         self.headers = {}
     
     def getCmd(self):
@@ -101,26 +110,27 @@ class Frame(object):
         """Check the cmd is valid, FrameError will be raised if its not."""
         cmd = cmd.upper()
         if cmd not in VALID_COMMANDS:
-            raise FrameError("The cmd '%s' is not valid! It must be one of '%s' (STOMP v%s)." % (cmd, VALID_COMMANDS, stomp_version))
+            raise FrameError("The cmd '%s' is not valid! It must be one of '%s' (STOMP v%s)." % (
+                cmd, VALID_COMMANDS, STOMP_VERSION)
+            )
+        else:
+            self._cmd = cmd
     
     cmd = property(getCmd, setCmd)
 
     
-    def getBody(self):
-        """Strip the STOMP message of null (^@) and return the body."""
-        return self._body.replace(self.NULL, ' ')
-        
-    def setBody(self, body):
-        """Add the body appending the null (^@) to it ready for transmission."""
-        self._body = "%s %s" % (body, self.NULL)
-        
-    body = property(getBody, setBody)
-
-
     def pack(self):
         """Called to create a STOMP message from the internal values.
         """
-        stomp_mesage = "%(command)s\n%(headers)s\n\n%()"
+        headers = ['%s:%s'%(f,v) for f,v in self.headers.items()]
+        headers = "\n".join(headers)        
+        
+        stomp_mesage = "%s\n%s\n\n%s\n\n%s\n" % (self._cmd, headers, self.body, NULL)
+
+#        import pprint
+#        print "stomp_mesage: ", pprint.pprint(stomp_mesage)
+        
+        return stomp_mesage
 
         
     def unpack(self, message):
@@ -143,15 +153,14 @@ class Frame(object):
         msg = unpack_frame(message)
         
         self.cmd = msg['cmd']
-        self.headers = msg['cmd']['headers']
+        self.headers = msg['headers']
         
         # Assign directly as the message will have the null
         # character in the message already.
-        self._body = msg['cmd']['body']
+        self.body = msg['body']
 
         return msg
 
-        
 
 def unpack_frame(message):
     """Called to unpack a STOMP message into a dictionary.
@@ -169,7 +178,7 @@ def unpack_frame(message):
         }
         
         # Body:
-        'body' : '...1234...',
+        'body' : '...1234...\x00',
     }
         
     """
@@ -193,7 +202,9 @@ def unpack_frame(message):
             returned['headers'][header.strip()] = data.strip()
 
     def bodyD(field):
-        body.append(field)
+        field = field.strip()
+        if field:
+            body.append(field)
 
     # Recover the header fields and body data
     handler = headD
@@ -207,8 +218,11 @@ def unpack_frame(message):
         handler(field)
 
     # Stich the body data together:
+#    print "1. body: ", body
     body = "".join(body)
-    returned['body'] = body.replace('^@', '')
+    returned['body'] = body.replace('\x00', '')
+
+#    print "2. body: <%s>" % returned['body']
     
     return returned
 
@@ -358,30 +372,50 @@ class Engine(object):
     message if needed.
     
     """
-    def __init__(self):
+    def __init__(self, testing=False):
+        self.testing = testing
+        
+        self.log = logging.getLogger("stomper.Engine")
+        
         self.sessionId = ''
         
-        self.doAck = False
-        
-        # Format COMMAND : Action
+        # Entry Format:
+        #
+        #    COMMAND : Handler_Function 
+        #
         self.states = {
             'CONNECTED' : self.connected,
             'MESSAGE' : self.ack,
+            'ERROR' : self.error,
+            'RECEIPT' : self.receipt,
         }
+        
                 
     def react(self, msg):
         """Called to provide a response to a message if needed.
         
         msg:
             This is a dictionary as returned by unpack_frame(...)
+            or it can be a straight STOMP message. This function
+            will attempt to determine which an deal with it.
 
         returned:
             A message to return or an empty string.
             
         """
         returned = ""
+
+        # If its not a string assume its a dict. 
+        mtype = type(msg)
+        if mtype in types.StringTypes:
+            msg = unpack_frame(msg)        
+        elif mtype == types.DictType:
+            pass
+        else:
+            raise FrameError("Unknown message type '%s', I don't know what to do with this!" % mtype)
         
         if self.states.has_key(msg['cmd']):
+#            print("reacting to message - %s" % msg['cmd'])
             returned = self.states[msg['cmd']](msg)
             
         return returned
@@ -394,7 +428,7 @@ class Engine(object):
         member sessionId for later use.
         
         returned:
-            NOREPONSE
+            NO_REPONSE_NEEDED
             
         """
         self.sessionId = msg['headers']['session']
@@ -404,19 +438,72 @@ class Engine(object):
 
 
     def ack(self, msg):
-        """Return an acknowlege message for the given message and transaction (if present)
+        """Called when a MESSAGE has been received.
+        
+        Override this method to handle received messages.
+        
+        This function will generate an acknowlege message 
+        for the given message and transaction (if present).
+        
         """
-        if not self.doAck:
-            return NO_REPONSE_NEEDED
-            
         message_id = msg['headers']['message-id']
 
         transaction_id = None
         if msg['headers'].has_key('transaction-id'):
             transaction_id = msg['headers']['transaction-id']
         
-        #print "acknowledging message id <%s>." % message_id
+#        print "acknowledging message id <%s>." % message_id
+        
         return ack(message_id, transaction_id)
+
+
+    def error(self, msg):
+        """Called to handle an error message received from the server.
+        
+        This method just logs the error message
+        
+        returned:
+            NO_REPONSE_NEEDED
+        
+        """
+        body = msg['body'].replace(NULL, '')
+        
+        brief_msg = ""
+        if msg['headers'].has_key('message'):
+            brief_msg = msg['headers']['message']
+        
+        self.log.error("Received server error - message%s\n\n%s" % (brief_msg, body))
+        
+        returned = NO_REPONSE_NEEDED
+        if self.testing:
+            returned = 'error'
+            
+        return returned
+
+
+    def receipt(self, msg):
+        """Called to handle a receipt message received from the server.
+        
+        This method just logs the receipt message
+        
+        returned:
+            NO_REPONSE_NEEDED
+        
+        """
+        body = msg['body'].replace(NULL, '')
+        
+        brief_msg = ""
+        if msg['headers'].has_key('receipt-id'):
+            brief_msg = msg['headers']['receipt-id']
+        
+        self.log.info("Received server receipt message - receipt-id:%s\n\n%s" % (brief_msg, body))
+        
+        returned = NO_REPONSE_NEEDED
+        if self.testing:
+            returned = 'receipt'
+            
+        return returned
+
 
 
 
