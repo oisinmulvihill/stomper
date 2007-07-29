@@ -5,12 +5,16 @@ A simple twisted STOMP message receiver server.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+import logging
+
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import stomper
 
-DESTINATION="/queue/my_dest"
+stomper.utils.log_init(logging.DEBUG)
+
+DESTINATION="/topic/inbox"
 
 class MyStomp(stomper.Engine):
     
@@ -18,6 +22,7 @@ class MyStomp(stomper.Engine):
         super(MyStomp, self).__init__()
         self.username = username
         self.password = password
+        self.log = logging.getLogger("receiver")
 
 
     def connect(self):
@@ -31,15 +36,21 @@ class MyStomp(stomper.Engine):
         """
         super(MyStomp, self).connected(msg)
 
-        print "connected: session %s" % msg['headers']['session']
-        return stomper.subscribe(DESTINATION)
+        self.log.info("connected: session %s" % msg['headers']['session'])
+        f = stomper.Frame()
+        f.unpack(stomper.subscribe(DESTINATION, ack='client'))
+
+        return f.pack()
 
         
     def ack(self, msg):
         """Process the message and determine what to do with it.
         """
-        print "RECEIVER - received: ", msg['body']
-        return stomper.NO_REPONSE_NEEDED
+        self.log.info("RECEIVER - received: %s " % msg['body'])
+        
+        return super(MyStomp, self).ack(msg) 
+
+        #return stomper.NO_REPONSE_NEEDED
         
 
 

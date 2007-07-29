@@ -33,6 +33,13 @@ page is here:
 - `ActiveMQ <http://activemq.apache.org/>`_
 
 
+Source Code
+-----------
+
+The code can be accessed via subversion via google project hosting. Further 
+details can be found here:
+
+- `Stomper http://code.google.com/p/stomper/`_
 
 
 Examples

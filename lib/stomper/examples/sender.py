@@ -5,14 +5,17 @@ A simple twisted STOMP message sender.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+import logging
+
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import stomper
 
-DESTINATION="/queue/my_dest"
+stomper.utils.log_init(logging.DEBUG)
 
+DESTINATION="/topic/inbox"
 
 class StompProtocol(Protocol, stomper.Engine):
 
@@ -20,6 +23,8 @@ class StompProtocol(Protocol, stomper.Engine):
         stomper.Engine.__init__(self)
         self.username = username
         self.password = password
+        self.counter = 1
+        self.log = logging.getLogger("sender")
 
 
     def connected(self, msg):
@@ -27,11 +32,19 @@ class StompProtocol(Protocol, stomper.Engine):
         """
         stomper.Engine.connected(self, msg)
 
-        print "Connected: session %s. Begining say hello." % msg['headers']['session']
+        self.log.info("Connected: session %s. Begining say hello." % msg['headers']['session'])
         lc = LoopingCall(self.send)
         lc.start(1)
+
+        f = stomper.Frame()
+        f.unpack(stomper.subscribe(DESTINATION))
+
+        # ActiveMQ specific headers:
+        #
+        # prevent the messages we send comming back to us.
+        f.headers['activemq.noLocal'] = 'true'
         
-        return stomper.subscribe(DESTINATION)
+        return f.pack()
 
         
     def ack(self, msg):
@@ -39,15 +52,24 @@ class StompProtocol(Protocol, stomper.Engine):
         generate an ack message.
         
         """
-        print "SENDER - received: ", msg['body']
+        self.log.info("SENDER - received: %s " % msg['body'])
         return stomper.NO_REPONSE_NEEDED
 
 
     def send(self):
         """Send out a hello message periodically.
         """
-        print "Saying hello."
-        self.transport.write(stomper.send(DESTINATION, 'hello there'))
+        self.log.info("Saying hello (%d)." % self.counter)
+        self.counter += 1        
+
+        f = stomper.Frame()
+        f.unpack(stomper.send(DESTINATION, 'hello there (%d)' % self.counter))
+
+        # ActiveMQ specific headers:
+        #
+        f.headers['persistent'] = 'true'
+
+        self.transport.write(f.pack())
 
 
     def connectionMade(self):
