@@ -16,6 +16,7 @@ stomper.utils.log_init(logging.DEBUG)
 
 DESTINATION="/topic/inbox"
 
+
 class MyStomp(stomper.Engine):
     
     def __init__(self, username='', password=''):
@@ -38,8 +39,7 @@ class MyStomp(stomper.Engine):
 
         self.log.info("connected: session %s" % msg['headers']['session'])
         f = stomper.Frame()
-        f.unpack(stomper.subscribe(DESTINATION, ack='client'))
-
+        f.unpack(stomper.subscribe(DESTINATION))
         return f.pack()
 
         
@@ -48,9 +48,9 @@ class MyStomp(stomper.Engine):
         """
         self.log.info("RECEIVER - received: %s " % msg['body'])
         
-        return super(MyStomp, self).ack(msg) 
+#        return super(MyStomp, self).ack(msg) 
 
-        #return stomper.NO_REPONSE_NEEDED
+        return stomper.NO_REPONSE_NEEDED
         
 
 
@@ -104,6 +104,7 @@ class StompClientFactory(ReconnectingClientFactory):
         """Connection failed
         """
         print 'Connection failed. Reason:', reason        
+        connector.connect()
 
 
 

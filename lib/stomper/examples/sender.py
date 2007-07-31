@@ -17,6 +17,7 @@ stomper.utils.log_init(logging.DEBUG)
 
 DESTINATION="/topic/inbox"
 
+
 class StompProtocol(Protocol, stomper.Engine):
 
     def __init__(self, username='', password=''):
@@ -67,7 +68,7 @@ class StompProtocol(Protocol, stomper.Engine):
 
         # ActiveMQ specific headers:
         #
-        f.headers['persistent'] = 'true'
+        #f.headers['persistent'] = 'true'
 
         self.transport.write(f.pack())
 
@@ -109,7 +110,7 @@ class StompClientFactory(ReconnectingClientFactory):
         """Connection failed
         """
         print 'Connection failed. Reason:', reason        
-
+        connector.connect()
 
 
 def start(host='localhost', port=61613, username='', password=''):
