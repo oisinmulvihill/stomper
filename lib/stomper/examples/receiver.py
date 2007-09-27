@@ -104,7 +104,7 @@ class StompClientFactory(ReconnectingClientFactory):
         """Connection failed
         """
         print 'Connection failed. Reason:', reason        
-        connector.connect()
+        ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
 
 

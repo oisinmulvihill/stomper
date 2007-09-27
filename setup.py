@@ -9,12 +9,10 @@ import sys
 import logging
 from setuptools import setup, find_packages
 
-sys.path.insert(0,'lib')
-import stomper
 
 Name='stomper'
 #ProjecUrl="http://www.sourceweaver.com/stomper"
-Version='0.2.0'
+Version='0.2.1'
 Author='Oisin Mulvihill'
 AuthorEmail='oisin dot mulvihill at gmail com'
 Maintainer=' Oisin Mulvihill'
@@ -23,14 +21,14 @@ License='http://www.apache.org/licenses/LICENSE-2.0'
 ShortDescription="This is a transport neutral client implementation of the STOMP protocol."
 
 # Recover the ReStructuredText docs:
-fd = file(stomper.doc.documentation)
+fd = file("lib/stomper/doc/stomper.stx")
 Description=fd.read()
 fd.close()
 
 TestSuite = 'stomper.tests'
 
 # stop any logger not found messages  if tests are run.
-stomper.utils.log_init(logging.CRITICAL)
+#stomper.utils.log_init(logging.CRITICAL)
 
 
 ProjectScripts = [
@@ -42,6 +40,10 @@ PackageData = {
     'stomper': ['doc/*.stx',],
 }
 
+needed = [
+    'uuid>=1.2',
+]
+
 setup(
 #    url=ProjecUrl,
     name=Name,
@@ -51,9 +53,12 @@ setup(
     description=ShortDescription,
     long_description=Description,
     license=License,
+    install_requires=needed,
     test_suite=TestSuite,
     scripts=ProjectScripts,
     packages=find_packages('lib'),
     package_data=PackageData,
     package_dir = {'': 'lib'},
 )
+
+

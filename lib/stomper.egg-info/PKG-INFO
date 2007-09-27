@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: stomper
-Version: 0.2.0
+Version: 0.2.1
 Summary: This is a transport neutral client implementation of the STOMP protocol.
 Home-page: UNKNOWN
 Author: Oisin Mulvihill
@@ -41,6 +41,13 @@ Description: =======
         - `ActiveMQ <http://activemq.apache.org/>`_
         
         
+        Source Code
+        -----------
+        
+        The code can be accessed via subversion via google project hosting. Further
+        details can be found here:
+        
+        - `Stomper http://code.google.com/p/stomper/`_
         
         
         Examples
