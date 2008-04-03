@@ -5,13 +5,11 @@ Stomper distutils file.
 2007-07-26
 
 """
-import sys
-import logging
 from setuptools import setup, find_packages
 
 
 Name='stomper'
-#ProjecUrl="http://www.sourceweaver.com/stomper"
+ProjecUrl="http://code.google.com/p/stomper"
 Version='0.2.1'
 Author='Oisin Mulvihill'
 AuthorEmail='oisin dot mulvihill at gmail com'
@@ -19,6 +17,12 @@ Maintainer=' Oisin Mulvihill'
 Summary='This is a transport neutral client implementation of the STOMP protocol.'
 License='http://www.apache.org/licenses/LICENSE-2.0'
 ShortDescription="This is a transport neutral client implementation of the STOMP protocol."
+Classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+]
 
 # Recover the ReStructuredText docs:
 fd = file("lib/stomper/doc/stomper.stx")
@@ -52,7 +56,9 @@ setup(
     author_email=AuthorEmail,
     description=ShortDescription,
     long_description=Description,
+    url=ProjecUrl,
     license=License,
+    classifiers=Classifiers,
     install_requires=needed,
     test_suite=TestSuite,
     scripts=ProjectScripts,
