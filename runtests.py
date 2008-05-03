@@ -29,6 +29,8 @@ current = os.path.abspath(os.path.curdir)
 test_paths = [
     current + "/lib/stomper/tests",
 ]
+env = os.environ
+env['NOSE_WHERE'] = ' '.join(test_paths)
 
 
 # Set up logging so we don't get any logger not found messages:
@@ -37,29 +39,7 @@ import stomper
 stomper.utils.log_init(logging.CRITICAL)
 
 
-class MyTestCollector(nose.LazySuite):
-    """My test collector to run test from a specific list of dirs rather then just one or through discovery.
-    """
-    testLocations = []
-
-    def __init__(self, conf, loader=None):
-        self.locatedTests = []
-        self.loader = nose.TestLoader(conf)
-
-        # Recover tests from the various directories:
-        for location in self.testLocations:
-            self.locatedTests.extend(self.loader.loadTestsFromDir(location))
-
-    def loadtests(self):
-        for test in self.locatedTests:
-            yield test
-
-    def __repr__(self):
-        return "collector for %s" % self.locatedTests
-    __str__ = __repr__
-
-# Use my collector only on the directries I want:
-MyTestCollector.testLocations = test_paths
-result = nose.core.TestProgram(defaultTest=MyTestCollector).success
+result = nose.core.TestProgram(env=env).success
 nose.result.end_capture()
+
 

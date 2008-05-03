@@ -37,9 +37,13 @@ import logging
 
 import doc
 import utils
+import stompbuffer
 
 # This is used as a return from message reponses functions.
 # It is used more for readability more then anything or reason.
+NO_RESPONSE_NEEDED = ''
+
+# For backwards compatibility
 NO_REPONSE_NEEDED = ''
 
 
@@ -52,7 +56,7 @@ NULL = '\x00'
 # STOMP Spec v1.0 valid commands:
 VALID_COMMANDS = [
     'ABORT', 'ACK', 'BEGIN', 'COMMIT', 
-    'CONNECT', 'DISCONNECT', 'MESSAGE', 
+    'CONNECT', 'CONNECTED', 'DISCONNECT', 'MESSAGE',
     'SEND', 'SUBSCRIBE', 'UNSUBSCRIBE',
     'RECEIPT', 'ERROR',    
 ]
@@ -125,7 +129,7 @@ class Frame(object):
         headers = ['%s:%s'%(f,v) for f,v in self.headers.items()]
         headers = "\n".join(headers)        
         
-        stomp_mesage = "%s\n%s\n\n%s\n\n%s\n" % (self._cmd, headers, self.body, NULL)
+        stomp_mesage = "%s\n%s\n\n%s%s\n" % (self._cmd, headers, self.body, NULL)
 
 #        import pprint
 #        print "stomp_mesage: ", pprint.pprint(stomp_mesage)
@@ -336,7 +340,7 @@ def send(dest, msg, transactionid=None):
     if transactionid:
         transheader = 'transaction: %s' % transactionid
         
-    return "SEND\ndestination: %s\n%s\n%s\x00\n" % (dest, transheader, msg)
+    return "SEND\ndestination: %s\n%s\n\n%s\x00\n" % (dest, transheader, msg)
     
     
 def subscribe(dest, ack='auto'):
@@ -428,13 +432,13 @@ class Engine(object):
         member sessionId for later use.
         
         returned:
-            NO_REPONSE_NEEDED
+            NO_RESPONSE_NEEDED
             
         """
         self.sessionId = msg['headers']['session']
         #print "connected: session id '%s'." % self.sessionId
         
-        return NO_REPONSE_NEEDED
+        return NO_RESPONSE_NEEDED
 
 
     def ack(self, msg):
@@ -463,7 +467,7 @@ class Engine(object):
         This method just logs the error message
         
         returned:
-            NO_REPONSE_NEEDED
+            NO_RESPONSE_NEEDED
         
         """
         body = msg['body'].replace(NULL, '')
@@ -474,7 +478,7 @@ class Engine(object):
         
         self.log.error("Received server error - message%s\n\n%s" % (brief_msg, body))
         
-        returned = NO_REPONSE_NEEDED
+        returned = NO_RESPONSE_NEEDED
         if self.testing:
             returned = 'error'
             
@@ -487,7 +491,7 @@ class Engine(object):
         This method just logs the receipt message
         
         returned:
-            NO_REPONSE_NEEDED
+            NO_RESPONSE_NEEDED
         
         """
         body = msg['body'].replace(NULL, '')
@@ -498,13 +502,9 @@ class Engine(object):
         
         self.log.info("Received server receipt message - receipt-id:%s\n\n%s" % (brief_msg, body))
         
-        returned = NO_REPONSE_NEEDED
+        returned = NO_RESPONSE_NEEDED
         if self.testing:
             returned = 'receipt'
             
         return returned
 
-
-
-
-        

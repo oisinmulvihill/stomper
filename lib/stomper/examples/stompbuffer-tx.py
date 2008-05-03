@@ -12,6 +12,8 @@ from twisted.internet.task import LoopingCall
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import stomper
+from stomper import stompbuffer
+
 
 stomper.utils.log_init(logging.DEBUG)
 
@@ -26,6 +28,7 @@ class StompProtocol(Protocol, stomper.Engine):
         self.password = password
         self.counter = 1
         self.log = logging.getLogger("sender")
+        self.stompBuffer = stompbuffer.StompBuffer()
 
 
     def connected(self, msg):
@@ -82,13 +85,19 @@ class StompProtocol(Protocol, stomper.Engine):
 
 
     def dataReceived(self, data):
-        """Data received, react to it and respond if needed.
+        """Use stompbuffer to determine when a complete message has been received. 
         """
-        msg = stomper.unpack_frame(data)
-        
-        returned = self.react(msg)
-        if returned:
-            self.transport.write(returned)
+        self.stompBuffer.appendData(data)
+
+        while True:
+           msg = self.stompBuffer.getOneMessage()
+           if msg is None:
+               break
+
+           returned = self.react(msg)
+           if returned:
+               self.transport.write(returned)
+
 
 
 

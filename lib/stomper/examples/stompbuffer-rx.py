@@ -1,5 +1,5 @@
 """
-A simple twisted STOMP message sender.
+A simple twisted STOMP message receiver server.
 
 (c) Oisin Mulvihill, 2007-07-26.
 License: http://www.apache.org/licenses/LICENSE-2.0
@@ -8,87 +8,82 @@ License: http://www.apache.org/licenses/LICENSE-2.0
 import logging
 
 from twisted.internet import reactor
-from twisted.internet.task import LoopingCall
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import stomper
+from stomper import stompbuffer
 
 stomper.utils.log_init(logging.DEBUG)
 
 DESTINATION="/topic/inbox"
 
 
-class StompProtocol(Protocol, stomper.Engine):
-
+class MyStomp(stomper.Engine):
+    
     def __init__(self, username='', password=''):
-        stomper.Engine.__init__(self)
+        super(MyStomp, self).__init__()
         self.username = username
         self.password = password
-        self.counter = 1
-        self.log = logging.getLogger("sender")
+        self.log = logging.getLogger("receiver")
+
+
+    def connect(self):
+        """Generate the STOMP connect command to get a session.
+        """
+        return stomper.connect(self.username, self.password)
 
 
     def connected(self, msg):
         """Once I've connected I want to subscribe to my the message queue.
         """
-        stomper.Engine.connected(self, msg)
+        super(MyStomp, self).connected(msg)
 
-        self.log.info("Connected: session %s. Begining say hello." % msg['headers']['session'])
-        lc = LoopingCall(self.send)
-        lc.start(1)
-
+        self.log.info("connected: session %s" % msg['headers']['session'])
         f = stomper.Frame()
         f.unpack(stomper.subscribe(DESTINATION))
-
-        # ActiveMQ specific headers:
-        #
-        # prevent the messages we send comming back to us.
-        f.headers['activemq.noLocal'] = 'true'
-        
         return f.pack()
 
         
     def ack(self, msg):
-        """Processes the received message. I don't need to 
-        generate an ack message.
+        """Process the message and determine what to do with it.
+        """
+        self.log.info("RECEIVER - received: %s " % msg['body'])
         
-        """
-        self.log.info("SENDER - received: %s " % msg['body'])
+#        return super(MyStomp, self).ack(msg) 
+
         return stomper.NO_REPONSE_NEEDED
+        
 
 
-    def send(self):
-        """Send out a hello message periodically.
-        """
-        self.log.info("Saying hello (%d)." % self.counter)
+class StompProtocol(Protocol):
 
-        f = stomper.Frame()
-        f.unpack(stomper.send(DESTINATION, 'hello there (%d)' % self.counter))
-
-        self.counter += 1        
-
-        # ActiveMQ specific headers:
-        #
-        #f.headers['persistent'] = 'true'
-
-        self.transport.write(f.pack())
+    def __init__(self, username='', password=''):
+        self.sm = MyStomp(username, password)
+        self.stompBuffer = stompbuffer.StompBuffer()
 
 
     def connectionMade(self):
-        """Register with stomp server.
+        """Register with the stomp server.
         """
-        cmd = stomper.connect(self.username, self.password)
+        cmd = self.sm.connect()
         self.transport.write(cmd)
 
 
     def dataReceived(self, data):
-        """Data received, react to it and respond if needed.
+        """Use stompbuffer to determine when a complete message has been received. 
         """
-        msg = stomper.unpack_frame(data)
-        
-        returned = self.react(msg)
-        if returned:
-            self.transport.write(returned)
+        self.stompBuffer.appendData(data)
+
+        while True:
+           msg = self.stompBuffer.getOneMessage()
+           if msg is None:
+               break
+
+           returned = self.sm.react(msg)
+           if returned:
+               self.transport.write(returned)
+               
+
 
 
 
@@ -97,7 +92,14 @@ class StompClientFactory(ReconnectingClientFactory):
     # Will be set up before the factory is created.
     username, password = '', ''
     
+    def startedConnecting(self, connector):
+        """Started to connect.
+        """
+
+
     def buildProtocol(self, addr):
+        """Transport level connected now create the communication protocol.
+        """
         return StompProtocol(self.username, self.password)
     
     
@@ -112,6 +114,7 @@ class StompClientFactory(ReconnectingClientFactory):
         """
         print 'Connection failed. Reason:', reason        
         ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+
 
 
 def start(host='localhost', port=61613, username='', password=''):

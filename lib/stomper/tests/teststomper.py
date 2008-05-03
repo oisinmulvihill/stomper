@@ -187,7 +187,7 @@ message-id: some-message-id
         self.assertEquals(frame2.body, 'hello queue a')
         result = frame2.pack()
 
-        correct = "MESSAGE\ndestination:/queue/a\nmessage-id:card_data\n\nhello queue a\n\n\x00\n"
+        correct = "MESSAGE\ndestination:/queue/a\nmessage-id:card_data\n\nhello queue a\x00\n"
         
 #        print "result: "
 #        pprint.pprint(result)
@@ -195,7 +195,7 @@ message-id: some-message-id
 #        print "correct: "
 #        pprint.pprint(correct)
 #        print 
-
+#
         self.assertEquals(result, correct)
 
         result = stomper.unpack_frame(result)
@@ -310,11 +310,21 @@ hello queue a
 
     def testSend(self):
         dest, transactionid, msg = '/queue/myplace', '', '123 456 789'
-        correct = "SEND\ndestination: %s\n%s\n%s\x00\n" % (dest, '', msg)
-        self.assertEquals(stomper.send(dest, msg, transactionid), correct)
+        correct = "SEND\ndestination: %s\n\n%s\n%s\x00\n" % (dest, '', msg)
+        result = stomper.send(dest, msg, transactionid)
+        
+#        print "result: "
+#        pprint.pprint(result)
+#        print
+#        print "correct: "
+#        pprint.pprint(correct)
+#        print 
+
+
+        self.assertEquals(result, correct)
 
         dest, transactionid, msg = '/queue/myplace', '987', '123 456 789'
-        correct = "SEND\ndestination: %s\ntransaction: %s\n%s\x00\n" % (dest, transactionid, msg)
+        correct = "SEND\ndestination: %s\ntransaction: %s\n\n%s\x00\n" % (dest, transactionid, msg)
         self.assertEquals(stomper.send(dest, msg, transactionid), correct)
         
         

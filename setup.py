@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 Name='stomper'
 ProjecUrl="http://code.google.com/p/stomper"
-Version='0.2.1'
+Version='0.2.2' # alpha release
 Author='Oisin Mulvihill'
 AuthorEmail='oisin dot mulvihill at gmail com'
 Maintainer=' Oisin Mulvihill'
@@ -43,6 +43,7 @@ PackageData = {
     # If any package contains *.txt or *.rst files, include them:
     'stomper': ['doc/*.stx',],
 }
+
 
 needed = [
     'uuid>=1.2',
