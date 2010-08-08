@@ -37,8 +37,12 @@ class StompProtocol(Protocol, stomper.Engine):
         stomper.Engine.connected(self, msg)
 
         self.log.info("Connected: session %s. Begining say hello." % msg['headers']['session'])
-        lc = LoopingCall(self.send)
-        lc.start(1)
+        
+        def setup_looping_call():
+            lc = LoopingCall(self.send)
+            lc.start(2)
+            
+        reactor.callLater(1, setup_looping_call)
 
         f = stomper.Frame()
         f.unpack(stomper.subscribe(DESTINATION))

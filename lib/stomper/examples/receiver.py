@@ -5,7 +5,9 @@ A simple twisted STOMP message receiver server.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+import uuid
 import logging
+import itertools
 
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
@@ -24,6 +26,7 @@ class MyStomp(stomper.Engine):
         self.username = username
         self.password = password
         self.log = logging.getLogger("receiver")
+        self.receiverId = str(uuid.uuid4())
 
 
     def connect(self):
@@ -37,7 +40,7 @@ class MyStomp(stomper.Engine):
         """
         super(MyStomp, self).connected(msg)
 
-        self.log.info("connected: session %s" % msg['headers']['session'])
+        self.log.info("receiverId <%s> connected: session %s" % (self.receiverId, msg['headers']['session']))
         f = stomper.Frame()
         f.unpack(stomper.subscribe(DESTINATION))
         return f.pack()
@@ -46,12 +49,11 @@ class MyStomp(stomper.Engine):
     def ack(self, msg):
         """Process the message and determine what to do with it.
         """
-        self.log.info("RECEIVER - received: %s " % msg['body'])
+        self.log.info("receiverId <%s> Received: <%s> " % (self.receiverId, msg['body']))
         
-#        return super(MyStomp, self).ack(msg) 
-
+        #return super(MyStomp, self).ack(msg) 
         return stomper.NO_REPONSE_NEEDED
-        
+
 
 
 class StompProtocol(Protocol):
@@ -70,9 +72,14 @@ class StompProtocol(Protocol):
     def dataReceived(self, data):
         """Data received, react to it and respond if needed.
         """
+#        print "receiver dataReceived: <%s>" % data
+        
         msg = stomper.unpack_frame(data)
         
         returned = self.sm.react(msg)
+
+#        print "receiver returned <%s>" % returned
+        
         if returned:
             self.transport.write(returned)
 

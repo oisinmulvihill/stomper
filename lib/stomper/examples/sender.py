@@ -5,7 +5,9 @@ A simple twisted STOMP message sender.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+import uuid
 import logging
+import itertools
 
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
@@ -24,8 +26,9 @@ class StompProtocol(Protocol, stomper.Engine):
         stomper.Engine.__init__(self)
         self.username = username
         self.password = password
-        self.counter = 1
+        self.counter = itertools.count(0)
         self.log = logging.getLogger("sender")
+        self.senderID = str(uuid.uuid4())
 
 
     def connected(self, msg):
@@ -33,9 +36,21 @@ class StompProtocol(Protocol, stomper.Engine):
         """
         stomper.Engine.connected(self, msg)
 
-        self.log.info("Connected: session %s. Begining say hello." % msg['headers']['session'])
-        lc = LoopingCall(self.send)
-        lc.start(1)
+        self.log.info("senderID:%s Connected: session %s." % (
+            self.senderID, 
+            msg['headers']['session'])
+        )
+
+        # I originally called loopingCall(self.send) directly, however it turns
+        # out that we had not fully subscribed. This meant we did not receive 
+        # out our first send message. I fixed this by using reactor.callLater
+        # 
+        #
+        def setup_looping_call():
+            lc = LoopingCall(self.send)
+            lc.start(2)
+            
+        reactor.callLater(1, setup_looping_call)
 
         f = stomper.Frame()
         f.unpack(stomper.subscribe(DESTINATION))
@@ -53,19 +68,22 @@ class StompProtocol(Protocol, stomper.Engine):
         generate an ack message.
         
         """
-        self.log.info("SENDER - received: %s " % msg['body'])
+        self.log.info("senderID:%s Received: %s " % (self.senderID, msg['body']))
         return stomper.NO_REPONSE_NEEDED
 
 
     def send(self):
         """Send out a hello message periodically.
         """
-        self.log.info("Saying hello (%d)." % self.counter)
+        counter = self.counter.next()
+        
+        self.log.info("senderID:%s Saying hello (%d)." % (self.senderID, counter))
 
         f = stomper.Frame()
-        f.unpack(stomper.send(DESTINATION, 'hello there (%d)' % self.counter))
-
-        self.counter += 1        
+        f.unpack(stomper.send(DESTINATION, '(%d) hello there from senderID:<%s>' % (
+            counter, 
+            self.senderID
+        )))
 
         # ActiveMQ specific headers:
         #
@@ -84,9 +102,14 @@ class StompProtocol(Protocol, stomper.Engine):
     def dataReceived(self, data):
         """Data received, react to it and respond if needed.
         """
+        #print "sender dataReceived: <%s>" % data
+
         msg = stomper.unpack_frame(data)
         
         returned = self.react(msg)
+
+        #print "sender returned: <%s>" % returned
+
         if returned:
             self.transport.write(returned)
 
