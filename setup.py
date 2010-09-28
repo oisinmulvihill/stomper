@@ -5,6 +5,7 @@ Stomper distutils file.
 2007-07-26
 
 """
+import sys
 from setuptools import setup, find_packages
 
 
@@ -45,9 +46,11 @@ PackageData = {
 }
 
 
-needed = [
-    'uuid>=1.2',
-]
+needed = []
+if sys.version_info < (2, 5):
+    needed += [
+        'uuid>=1.2',
+    ]
 
 setup(
 #    url=ProjecUrl,

@@ -8,7 +8,8 @@ Stomper
     Oisin Mulvihill
 
 Contributors:
-    Micheal Twomey, Ricky Iacovou <iacovou at gmail dot com>
+    Micheal Twomey, Ricky Iacovou <iacovou at gmail dot com>, 
+    Arfrever Frehtes Taifersar Arahesis <arfrever dot fta at gmail dot com>
 
 
 Introduction
@@ -69,6 +70,20 @@ the new stompbuffer module contributed by Ricky Iacovou.
 
 Version History
 ---------------
+
+0.2.4
+~~~~~
+
+OM: A minor relase fixing the problem whereby uuid would be installed on python2.5+. It 
+is not needed after python2.4 as it comes with python. Arfrever Frehtes Taifersar Arahesis 
+contributed the fix for this.
+
+
+0.2.3
+~~~~~
+
+OM: I've fixed  issue #9  with the example code. All messages are sent and received correctly. 
+
 
 0.2.2 
 ~~~~~
