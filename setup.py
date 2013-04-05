@@ -9,16 +9,22 @@ import sys
 from setuptools import setup, find_packages
 
 
-Name='stomper'
-ProjecUrl="http://code.google.com/p/stomper"
-Version='0.2.2' # alpha release
-Author='Oisin Mulvihill'
-AuthorEmail='oisin dot mulvihill at gmail com'
-Maintainer=' Oisin Mulvihill'
-Summary='This is a transport neutral client implementation of the STOMP protocol.'
-License='http://www.apache.org/licenses/LICENSE-2.0'
-ShortDescription="This is a transport neutral client implementation of the STOMP protocol."
-Classifiers=[
+Name = 'stomper'
+ProjectUrl = "http://code.google.com/p/stomper"
+Version = '0.2.5'
+Author = 'Oisin Mulvihill'
+AuthorEmail = 'oisin dot mulvihill at gmail com'
+Maintainer = 'Oisin Mulvihill'
+Summary = (
+    'This is a transport neutral client implementation '
+    'of the STOMP protocol.'
+)
+License = 'http://www.apache.org/licenses/LICENSE-2.0'
+ShortDescription = (
+    "This is a transport neutral client implementation of the "
+    "STOMP protocol."
+)
+Classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
@@ -27,7 +33,7 @@ Classifiers=[
 
 # Recover the ReStructuredText docs:
 fd = file("lib/stomper/doc/stomper.stx")
-Description=fd.read()
+Description = fd.read()
 fd.close()
 
 TestSuite = 'stomper.tests'
@@ -35,14 +41,11 @@ TestSuite = 'stomper.tests'
 # stop any logger not found messages  if tests are run.
 #stomper.utils.log_init(logging.CRITICAL)
 
-
-ProjectScripts = [
-#    '',
-]
+ProjectScripts = []
 
 PackageData = {
     # If any package contains *.txt or *.rst files, include them:
-    'stomper': ['doc/*.stx',],
+    'stomper': ['doc/*.stx'],
 }
 
 
@@ -53,14 +56,13 @@ if sys.version_info < (2, 5):
     ]
 
 setup(
-#    url=ProjecUrl,
     name=Name,
     version=Version,
     author=Author,
     author_email=AuthorEmail,
     description=ShortDescription,
     long_description=Description,
-    url=ProjecUrl,
+    url=ProjectUrl,
     license=License,
     classifiers=Classifiers,
     install_requires=needed,
@@ -68,7 +70,5 @@ setup(
     scripts=ProjectScripts,
     packages=find_packages('lib'),
     package_data=PackageData,
-    package_dir = {'': 'lib'},
+    package_dir={'': 'lib'},
 )
-
-
