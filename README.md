@@ -9,7 +9,7 @@ Stomper
 
 Contributors:
     Micheal Twomey, Ricky Iacovou <iacovou at gmail dot com>,
-    Arfrever Frehtes Taifersar Arahesis <arfrever dot fta at gmail dot com>
+    Arfrever Frehtes <arfrever dot fta at gmail dot com>,
     Niki Pore <niki pore at gmail dot com>
 
 
