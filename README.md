@@ -2,7 +2,7 @@
 Stomper
 =======
 
-.. content:
+.. content::
 
 :Author:
     Oisin Mulvihill
