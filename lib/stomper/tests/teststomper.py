@@ -70,7 +70,7 @@ class StomperTest(unittest.TestCase):
         # React to an error:
         error = stomper.Frame()
         error.cmd = 'ERROR'
-        error.headers = {'mesage:': 'malformed packet received!'}
+        error.headers = {'message:': 'malformed packet received!'}
         error.body = """The message:
 -----
 MESSAGE

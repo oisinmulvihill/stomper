@@ -44,7 +44,7 @@ resp = responder.react(stomper.unpack_frame(response))
 # just returns an empty string.
 
 
-# After a successfull connect you might want to subscribe
+# After a successful connect you might want to subscribe
 # for messages from a destination and tell the server you'll
 # acknowledge all messages.
 #

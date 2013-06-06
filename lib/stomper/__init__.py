@@ -2,7 +2,7 @@
 This is a python client implementation of the STOMP protocol.
 
 It aims to be transport layer neutral. This module provides functions to
-create and parse STOMP messages in a programatic fashion.
+create and parse STOMP messages in a programmatic fashion.
 
 The examples package contains two examples using twisted as the transport
 framework. Other frameworks can be used and I may add other examples as
@@ -39,7 +39,7 @@ import doc
 import utils
 import stompbuffer
 
-# This is used as a return from message reponses functions.
+# This is used as a return from message responses functions.
 # It is used more for readability more then anything or reason.
 NO_RESPONSE_NEEDED = ''
 
@@ -79,7 +79,7 @@ class Frame(object):
 
     The method unpack() is used to read a STOMP message into
     a frame instance. It uses the unpack_frame(...) function
-    to do the intial parsing.
+    to do the initial parsing.
 
     The frame has three important member variables:
 
@@ -128,12 +128,12 @@ class Frame(object):
         headers = ''.join(
             ['%s:%s\n' % (f, v) for f, v in self.headers.items()]
         )
-        stomp_mesage = "%s\n%s\n%s%s\n" % (self._cmd, headers, self.body, NULL)
+        stomp_message = "%s\n%s\n%s%s\n" % (self._cmd, headers, self.body, NULL)
 
 #        import pprint
-#        print "stomp_mesage: ", pprint.pprint(stomp_mesage)
+#        print "stomp_message: ", pprint.pprint(stomp_message)
 
-        return stomp_mesage
+        return stomp_message
 
 
     def unpack(self, message):
@@ -287,7 +287,7 @@ def commit(transactionid):
     """STOMP commit command.
 
     Do whatever is required to make the series of actions
-    permenant for this transactionid.
+    permanent for this transactionid.
 
     transactionid:
         This is the id that all actions in this transaction.
@@ -425,9 +425,9 @@ class Engine(object):
 
 
     def connected(self, msg):
-        """No reponse is needed to a connected frame.
+        """No response is needed to a connected frame.
 
-        This method stores the session id as a the
+        This method stores the session id as the
         member sessionId for later use.
 
         returned:
@@ -445,7 +445,7 @@ class Engine(object):
 
         Override this method to handle received messages.
 
-        This function will generate an acknowlege message
+        This function will generate an acknowledge message
         for the given message and transaction (if present).
 
         """
