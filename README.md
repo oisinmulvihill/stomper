@@ -20,7 +20,7 @@ Introduction
 This is a python client implementation of the STOMP protocol.
 
 The client is attempting to be transport layer neutral. This module provides
-functions to create and parse STOMP messages in a programatic fashion. The
+functions to create and parse STOMP messages in a programmatic fashion. The
 messages can be easily generated and parsed, however its up to the user to do
 the sending and receiving. The STOMP protocol specification can be found here:
 
@@ -28,7 +28,7 @@ the sending and receiving. The STOMP protocol specification can be found here:
 
 I've looked at the stomp client by Jason R. Briggs. I've based some of the
 'function to message' generation on how his client does it. The client can
-be found at the follow address however it isn't a dependancy.
+be found at the follow address however it isn't a dependency.
 
 - `stompy <http://www.briggs.net.nz/log/projects/stomppy>`_
 
@@ -83,7 +83,7 @@ Roger Hoover. This removes the extra line ending which can cause problems.
 0.2.4
 ~~~~~
 
-OM: A minor relase fixing the problem whereby uuid would be installed on python2.5+. It
+OM: A minor release fixing the problem whereby uuid would be installed on python2.5+. It
 is not needed after python2.4 as it comes with python. Arfrever Frehtes Taifersar Arahesis
 contributed the fix for this.
 
