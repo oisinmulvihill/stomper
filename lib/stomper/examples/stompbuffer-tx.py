@@ -36,7 +36,7 @@ class StompProtocol(Protocol, stomper.Engine):
         """
         stomper.Engine.connected(self, msg)
 
-        self.log.info("Connected: session %s. Begining say hello." % msg['headers']['session'])
+        self.log.info("Connected: session %s. Beginning say hello." % msg['headers']['session'])
         
         def setup_looping_call():
             lc = LoopingCall(self.send)

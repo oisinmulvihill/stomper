@@ -57,7 +57,7 @@ class StompProtocol(Protocol, stomper.Engine):
 
         # ActiveMQ specific headers:
         #
-        # prevent the messages we send comming back to us.
+        # prevent the messages we send coming back to us.
         f.headers['activemq.noLocal'] = 'true'
         
         return f.pack()

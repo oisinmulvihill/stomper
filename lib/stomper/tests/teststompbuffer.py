@@ -128,7 +128,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         msg1 = self.putAndGetText()
         msg2 = self.sb.getOneMessage()
         self.failUnless ( msg2 is None )
-        # Veryify that in fact the buffer is empty.
+        # Verify that in fact the buffer is empty.
         self.failUnless ( self.sb.bufferIsEmpty() )
 
 
@@ -141,7 +141,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         msg1 = self.putAndGetBinary()
         msg2 = self.sb.getOneMessage()
         self.failUnless ( msg2 is None )
-        # Veryify that in fact the buffer is empty.
+        # Verify that in fact the buffer is empty.
         self.failUnless ( self.sb.bufferIsEmpty() )
 
 
