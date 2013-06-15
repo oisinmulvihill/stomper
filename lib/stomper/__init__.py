@@ -35,7 +35,6 @@ import types
 import logging
 
 
-import doc
 import utils
 import stompbuffer
 

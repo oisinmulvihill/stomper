@@ -10,7 +10,8 @@ Stomper
 Contributors:
     Micheal Twomey, Ricky Iacovou <iacovou at gmail dot com>,
     Arfrever Frehtes <arfrever dot fta at gmail dot com>,
-    Niki Pore <niki pore at gmail dot com>
+    Niki Pore <niki pore at gmail dot com>,
+    Simon Chopin
 
 
 
@@ -72,6 +73,12 @@ the new stompbuffer module contributed by Ricky Iacovou.
 
 Version History
 ---------------
+
+0.2.6
+~~~~~
+
+Add contributed fixes from Simon Chopin. He corrected many spelling mistakes
+throughout the code base. I've also made the README.md the main
 
 0.2.5
 ~~~~~

@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 
 Name = 'stomper'
 ProjectUrl = "http://code.google.com/p/stomper"
-Version = '0.2.5'
+Version = '0.2.6'
 Author = 'Oisin Mulvihill'
 AuthorEmail = 'oisin dot mulvihill at gmail com'
 Maintainer = 'Oisin Mulvihill'
@@ -32,7 +32,7 @@ Classifiers = [
 ]
 
 # Recover the ReStructuredText docs:
-fd = file("lib/stomper/doc/stomper.stx")
+fd = file("README.md")
 Description = fd.read()
 fd.close()
 

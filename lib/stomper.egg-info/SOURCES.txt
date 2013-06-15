@@ -1,4 +1,3 @@
-README
 runtests.py
 setup.py
 lib/stomper/__init__.py
@@ -8,8 +7,6 @@ lib/stomper.egg-info/PKG-INFO
 lib/stomper.egg-info/SOURCES.txt
 lib/stomper.egg-info/dependency_links.txt
 lib/stomper.egg-info/top_level.txt
-lib/stomper/doc/__init__.py
-lib/stomper/doc/stomper.stx
 lib/stomper/examples/__init__.py
 lib/stomper/examples/receiver.py
 lib/stomper/examples/sender.py
