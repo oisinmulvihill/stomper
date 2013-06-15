@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 
 Name = 'stomper'
-ProjectUrl = "http://code.google.com/p/stomper"
+ProjectUrl = "https://github.com/oisinmulvihill/stomper"
 Version = '0.2.6'
 Author = 'Oisin Mulvihill'
 AuthorEmail = 'oisin dot mulvihill at gmail com'
