@@ -11,8 +11,9 @@ Contributors:
     Micheal Twomey, Ricky Iacovou <iacovou at gmail dot com>,
     Arfrever Frehtes <arfrever dot fta at gmail dot com>,
     Niki Pore <niki pore at gmail dot com>,
-    Simon Chopin
-
+    Simon Chopin,
+    Arfrever <https://github.com/Arfrever>,
+    Ian Weller <https://github.com/ianweller>,
 
 
 Introduction
@@ -73,6 +74,15 @@ the new stompbuffer module contributed by Ricky Iacovou.
 
 Version History
 ---------------
+
+0.2.7
+~~~~~
+
+I forgot to add a MANIFEST.in which makes sure README.md is present. Without
+this pip install fails: https://github.com/oisinmulvihill/stomper/issues/3.
+Thanks to Ian Weller for noticing this. I've also added in the fix suggested
+by Arfrever https://github.com/oisinmulvihill/stomper/issues/1.
+
 
 0.2.6
 ~~~~~
