@@ -1,3 +1,5 @@
+MANIFEST.in
+README.md
 runtests.py
 setup.py
 lib/stomper/__init__.py

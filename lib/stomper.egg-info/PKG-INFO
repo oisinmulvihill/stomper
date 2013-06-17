@@ -2,7 +2,7 @@ Metadata-Version: 1.1
 Name: stomper
 Version: 0.2.6
 Summary: This is a transport neutral client implementation of the STOMP protocol.
-Home-page: http://code.google.com/p/stomper
+Home-page: https://github.com/oisinmulvihill/stomper
 Author: Oisin Mulvihill
 Author-email: oisin dot mulvihill at gmail com
 License: http://www.apache.org/licenses/LICENSE-2.0
@@ -85,8 +85,8 @@ Description: =======
         0.2.6
         ~~~~~
         
-        Add contributed fixes from Simon Chopin, who corrected the many spelling mistakes
-        throughout the code base.
+        Add contributed fixes from Simon Chopin. He corrected many spelling mistakes
+        throughout the code base. I've also made the README.md the main
         
         0.2.5
         ~~~~~

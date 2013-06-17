@@ -44,8 +44,6 @@ TestSuite = 'stomper.tests'
 ProjectScripts = []
 
 PackageData = {
-    # If any package contains *.txt or *.rst files, include them:
-    'stomper': ['doc/*.stx'],
 }
 
 
