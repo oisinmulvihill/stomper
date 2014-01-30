@@ -43,10 +43,9 @@ page is here:
 Source Code
 -----------
 
-The code can be accessed via subversion via google project hosting. Further
-details can be found here:
+The code can be accessed via git on github. Further details can be found here:
 
-- `Stomper <http://code.google.com/p/stomper/>`_
+- `Stomper <https://github.com/oisinmulvihill/stomper>`_
 
 
 Examples
