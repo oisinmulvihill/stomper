@@ -54,19 +54,19 @@ Examples
 Basic Usage
 ~~~~~~~~~~~
 
-To see some basic code usage example see "*example/stomper_usage.py*". The unit test
-"*tests/teststomper.py*" illustrates how to use all aspects of the code.
+To see some basic code usage example see ``example/stomper_usage.py``. The unit test
+``tests/teststomper.py`` illustrates how to use all aspects of the code.
 
 
 Receive/Sender
 ~~~~~~~~~~~~~~
 
-The example "*receiver.py*" and "*sender.py*" show how messages and generated and then
+The example ``receiver.py`` and ``sender.py`` show how messages and generated and then
 transmitted using the twisted framework. Other frameworks could be used instead. The
 examples also demonstrate the state machine I used to determine a response to received
 messages.
 
-I've also included "*stompbuffer-rx.py*"  and "*stompbuffer-tx.py*" as examples of using
+I've also included ``stompbuffer-rx.py``  and ``stompbuffer-tx.py`` as examples of using
 the new stompbuffer module contributed by Ricky Iacovou.
 
 
