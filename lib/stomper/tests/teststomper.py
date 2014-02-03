@@ -312,7 +312,7 @@ hello queue a
 
     def testSend(self):
         dest, transactionid, msg = '/queue/myplace', '', '123 456 789'
-        correct = "SEND\ndestination: %s\n\n%s\n%s\x00\n" % (dest, '', msg)
+        correct = "SEND\ndestination: %s\n\n%s\x00\n" % (dest, msg)
         result = stomper.send(dest, msg, transactionid)
 
 #        print "result: "

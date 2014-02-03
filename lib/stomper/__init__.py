@@ -336,9 +336,9 @@ def send(dest, msg, transactionid=None):
     transheader = ''
 
     if transactionid:
-        transheader = 'transaction: %s' % transactionid
+        transheader = 'transaction: %s\n' % transactionid
 
-    return "SEND\ndestination: %s\n%s\n\n%s\x00\n" % (dest, transheader, msg)
+    return "SEND\ndestination: %s\n%s\n%s\x00\n" % (dest, transheader, msg)
 
 
 def subscribe(dest, ack='auto'):
