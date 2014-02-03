@@ -13,6 +13,7 @@ Stomper
     - Niki Pore <niki pore at gmail dot com>,
     - Simon Chopin,
     - Ian Weller <https://github.com/ianweller>,
+    - Daniele Varrazzo <daniele varrazzo at gmail.com>
 
 
 Introduction
@@ -72,6 +73,19 @@ the new stompbuffer module contributed by Ricky Iacovou.
 
 Version History
 ---------------
+
+0.2.8
+~~~~~
+
+Thanks to Daniele Varrazzo for contributing the fixes:
+
+https://github.com/oisinmulvihill/stomper/pull/4
+ * Fixed newline prepended to messages without transaction id
+
+https://github.com/oisinmulvihill/stomper/pull/5
+ * Fixed reST syntax. Extension changed to allow github to render it properly.
+   Also changed the source url in the readme.
+
 
 0.2.7
 ~~~~~
