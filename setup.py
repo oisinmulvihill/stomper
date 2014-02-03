@@ -32,7 +32,7 @@ Classifiers = [
 ]
 
 # Recover the ReStructuredText docs:
-fd = file("README.md")
+fd = file("README.rst")
 Description = fd.read()
 fd.close()
 
