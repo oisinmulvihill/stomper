@@ -13,7 +13,7 @@ Stomper
     - Niki Pore <niki pore at gmail dot com>,
     - Simon Chopin,
     - Ian Weller <https://github.com/ianweller>,
-    - Daniele Varrazzo <daniele varrazzo at gmail.com>
+    - Daniele Varrazzo <https://github.com/dvarrazzo>
 
 
 Introduction
