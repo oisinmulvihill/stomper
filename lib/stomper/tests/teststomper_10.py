@@ -47,7 +47,7 @@ class TestEngine(stomper.Engine):
         return 'receipt'
 
 
-class StomperTest(unittest.TestCase):
+class Stomper10Test(unittest.TestCase):
 
     def testEngineToServerMessages(self):
         """Test the state machines reaction
