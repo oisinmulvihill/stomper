@@ -3,6 +3,8 @@ README.rst
 runtests.py
 setup.py
 lib/stomper/__init__.py
+lib/stomper/stomp_10.py
+lib/stomper/stomp_11.py
 lib/stomper/stompbuffer.py
 lib/stomper/utils.py
 lib/stomper.egg-info/PKG-INFO
@@ -17,4 +19,5 @@ lib/stomper/examples/stompbuffer-tx.py
 lib/stomper/examples/stomper_usage.py
 lib/stomper/tests/__init__.py
 lib/stomper/tests/teststompbuffer.py
-lib/stomper/tests/teststomper.py
+lib/stomper/tests/teststomper_10.py
+lib/stomper/tests/teststomper_11.py

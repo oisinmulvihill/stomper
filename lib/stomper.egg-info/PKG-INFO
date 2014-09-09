@@ -1,4 +1,4 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: stomper
 Version: 0.2.8
 Summary: This is a transport neutral client implementation of the STOMP protocol.
@@ -21,7 +21,7 @@ Description: =======
             - Niki Pore <niki pore at gmail dot com>,
             - Simon Chopin,
             - Ian Weller <https://github.com/ianweller>,
-            - Daniele Varrazzo <daniele varrazzo at gmail.com>
+            - Daniele Varrazzo <https://github.com/dvarrazzo>
         
         
         Introduction
