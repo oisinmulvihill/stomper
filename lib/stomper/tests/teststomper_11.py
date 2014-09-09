@@ -311,15 +311,15 @@ hello queue a
 
     def testSubscribe(self):
         dest, ack = '/queue/all', 'client'
-        correct = "SUBSCRIBE\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
-        self.assertEquals(stomper.subscribe(dest, ack), correct)
+        correct = "SUBSCRIBE\nid:0\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
+        self.assertEquals(stomper.subscribe(dest, 0, ack), correct)
 
         dest, ack = '/queue/all', 'auto'
-        correct = "SUBSCRIBE\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
-        self.assertEquals(stomper.subscribe(dest, ack), correct)
+        correct = "SUBSCRIBE\nid:0\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
+        self.assertEquals(stomper.subscribe(dest, 0, ack), correct)
 
-        correct = "SUBSCRIBE\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
-        self.assertEquals(stomper.subscribe(dest), correct)
+        correct = "SUBSCRIBE\nid:0\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
+        self.assertEquals(stomper.subscribe(dest, 0), correct)
 
     def testConnect(self):
         username, password = 'bob', '123'

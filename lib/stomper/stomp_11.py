@@ -377,11 +377,14 @@ def send(dest, msg, transactionid=None, content_type='text/plain'):
         dest, content_type, transheader, msg)
 
 
-def subscribe(dest, ack='auto'):
+def subscribe(dest, idx, ack='auto'):
     """STOMP subscribe command.
 
     dest:
         This is the channel we wish to subscribe to
+
+    idx:
+        The ID that should uniquely identify the subscription
 
     ack: 'auto' | 'client'
         If the ack is set to client, then messages received will
@@ -389,7 +392,8 @@ def subscribe(dest, ack='auto'):
         will assume delivery failure.
 
     """
-    return "SUBSCRIBE\ndestination:%s\nack:%s\n\n\x00\n" % (dest, ack)
+    return "SUBSCRIBE\nid:%s\ndestination:%s\nack:%s\n\n\x00\n" % (
+        idx, dest, ack)
 
 
 def unsubscribe(idx):
