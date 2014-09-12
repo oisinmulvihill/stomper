@@ -19,7 +19,8 @@ License: http://www.apache.org/licenses/LICENSE-2.0
 import pprint
 import unittest
 
-import stomper.stomp_11 as stomper
+import stomper
+#.stomp_11 as stomper
 
 
 class TestEngine(stomper.Engine):

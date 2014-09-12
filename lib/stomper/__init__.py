@@ -1,12 +1,11 @@
-# TODO, someday switch this to stomp_11 when we trust that it works and is
-# backwards compatible.
-from stomp_10 import (
+from stomp_11 import (
     Engine,
     Frame,
     FrameError,
 
     abort,
     ack,
+    nack,
     begin,
     commit,
     connect,

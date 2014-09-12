@@ -75,26 +75,33 @@ Supported STOMP Versions
 1.1
 ~~~
 
-Ralph Bean has worked to add support for this version of STOMP. This will
-become the default protocol used in stomper 0.3.x releases.
-
-For now it can be used as follows::
-
-    import stomper.stomp_11 as stomper
+This is the default version of the of STOMP used in stomper versions 0.3.x.
 
 * https://stomp.github.io/stomp-specification-1.1.html
 
 1.0
 ~~~
 
-This is the default version of the of STOMP used in stomper versions 0.2.x.
-The default will change in stomper versions 0.3.x.
+This is no longer the default protocol version. To use it you can import it as
+follows::
+
+    import stomper.stomp_10 as stomper
 
 * https://stomp.github.io/stomp-specification-1.0.html
 
 
 Version History
 ---------------
+
+0.3.0
+~~~~~
+
+This release makes STOMP v1.1 the default protocol. To stick with STOMP v1.0
+you can continue to use stomper v0.2.9 or change the import in your code to::
+
+    import stomper.stomp_10 as stomper
+
+```Note:``` Any fixes to STOMP v1.0 will only be applied to version >= 0.3.
 
 0.2.9
 ~~~~~
