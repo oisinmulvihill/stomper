@@ -14,6 +14,7 @@ Stomper
     - Simon Chopin,
     - Ian Weller <https://github.com/ianweller>,
     - Daniele Varrazzo <https://github.com/dvarrazzo>
+    - Ralph Bean <http://threebean.org>
 
 
 Introduction
