@@ -87,6 +87,8 @@ follows::
 
     import stomper.stomp_10 as stomper
 
+This is the default version used in stomper version 0.2.x.
+
 * https://stomp.github.io/stomp-specification-1.0.html
 
 
@@ -101,7 +103,7 @@ you can continue to use stomper v0.2.9 or change the import in your code to::
 
     import stomper.stomp_10 as stomper
 
-```Note:``` Any fixes to STOMP v1.0 will only be applied to version >= 0.3.
+**Note** Any fixes to STOMP v1.0 will only be applied to version >= 0.3.
 
 0.2.9
 ~~~~~
