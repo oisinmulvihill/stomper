@@ -25,9 +25,7 @@ This is a python client implementation of the STOMP protocol.
 The client is attempting to be transport layer neutral. This module provides
 functions to create and parse STOMP messages in a programmatic fashion. The
 messages can be easily generated and parsed, however its up to the user to do
-the sending and receiving. The STOMP protocol specification can be found here:
-
-- `Stomp Protocol <http://stomp.codehaus.org/Protocol/>`_
+the sending and receiving.
 
 I've looked at the stomp client by Jason R. Briggs. I've based some of the
 'function to message' generation on how his client does it. The client can
@@ -71,9 +69,39 @@ messages.
 I've also included ``stompbuffer-rx.py``  and ``stompbuffer-tx.py`` as examples of using
 the new stompbuffer module contributed by Ricky Iacovou.
 
+Supported STOMP Versions
+------------------------
+
+1.1
+~~~
+
+Ralph Bean has worked to add support for this version of STOMP. This will
+become the default protocol used in stomper 0.3.x releases.
+
+For now it can be used as follows::
+
+    import stomper.stomp_11 as stomper
+
+* https://stomp.github.io/stomp-specification-1.1.html
+
+1.0
+~~~
+
+This is the default version of the of STOMP used in stomper versions 0.2.x.
+The default will change in stomper versions 0.3.x.
+
+* https://stomp.github.io/stomp-specification-1.0.html
+
 
 Version History
 ---------------
+
+0.2.9
+~~~~~
+
+Thanks to Ralph Bean for contributing the new protocol 1.1 support:
+ * https://github.com/oisinmulvihill/stomper/issues/6
+ * https://github.com/oisinmulvihill/stomper/pull/7
 
 0.2.8
 ~~~~~
