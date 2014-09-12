@@ -109,6 +109,7 @@ you can continue to use stomper v0.2.9 or change the import in your code to::
 ~~~~~
 
 Thanks to Ralph Bean for contributing the new protocol 1.1 support:
+
  * https://github.com/oisinmulvihill/stomper/issues/6
  * https://github.com/oisinmulvihill/stomper/pull/7
 
