@@ -30,7 +30,7 @@ def makeBinaryMessage ( body = BINBODY, cmd = CMD ):
 def messageIsGood ( msg, body = BODY, cmd = CMD ):
     if msg is None:
         return False
-    if type ( msg ) != types.DictType:
+    if type ( msg ) != dict:
         return False
     if msg [ 'cmd' ] != cmd:
         return False

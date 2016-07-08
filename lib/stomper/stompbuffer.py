@@ -6,6 +6,7 @@ Ricky Iacovou, 2008-03-27.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+from builtins import object
 
 import re
 import stomper

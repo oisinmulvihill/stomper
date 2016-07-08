@@ -5,6 +5,8 @@ A simple twisted STOMP message receiver server.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+from __future__ import print_function
+from builtins import str
 import uuid
 import logging
 import itertools
@@ -104,13 +106,13 @@ class StompClientFactory(ReconnectingClientFactory):
     def clientConnectionLost(self, connector, reason):
         """Lost connection
         """
-        print 'Lost connection.  Reason:', reason
+        print('Lost connection.  Reason:', reason)
     
     
     def clientConnectionFailed(self, connector, reason):
         """Connection failed
         """
-        print 'Connection failed. Reason:', reason        
+        print('Connection failed. Reason:', reason)        
         ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
 
