@@ -6,6 +6,7 @@ messages and anything else I can think of demonstrating.
 License: http://www.apache.org/licenses/LICENSE-2.0
 
 """
+from __future__ import print_function
 import pprint
 
 import stomper
@@ -15,7 +16,7 @@ responder = stomper.Engine()
 
 # Generate the connect command to tell the server about us:
 msg = stomper.connect('bob','1234')
-print "msg:\n%s\n" % pprint.pformat(msg)
+print("msg:\n%s\n" % pprint.pformat(msg))
 
 #>>> 'CONNECT\nlogin:bob\npasscode:1234\n\n\x00\n'
 
@@ -72,7 +73,7 @@ hello queue a
 # ACK message:
 
 response = responder.react(server_msg)
-print "response:\n%s\n" % pprint.pformat(response)
+print("response:\n%s\n" % pprint.pformat(response))
 
 #>>> 'ACK\nmessage-id: some-message-id\n\n\x00\n'
 
@@ -86,7 +87,7 @@ class Pong(stomper.Engine):
     def ack(self, msg):
         """Override this and do some customer message handler.
         """
-        print "Got a message:\n%s\n" % msg['body']
+        print("Got a message:\n%s\n" % msg['body'])
         
         # do something with the message...
         
@@ -96,7 +97,7 @@ class Pong(stomper.Engine):
 
 responder2 = Pong()
 response = responder2.react(server_msg)
-print "response:\n%s\n" % pprint.pformat(response)
+print("response:\n%s\n" % pprint.pformat(response))
 #>>> 'ACK\nmessage-id: some-message-id\n\n\x00\n'
 
 
@@ -105,7 +106,7 @@ print "response:\n%s\n" % pprint.pformat(response)
 
 # 1. using the the function for send()
 send_message = stomper.send(DESTINATION, 'hello there') 
-print "1. send_message:\n%s\n" % pprint.pformat(send_message)
+print("1. send_message:\n%s\n" % pprint.pformat(send_message))
 
 #>>> 'SEND\ndestination: /queue/inbox\n\nhello there\x00\n'
 
@@ -115,7 +116,7 @@ msg = stomper.Frame()
 msg.cmd = 'SEND'
 msg.headers = {'destination':'/queue/a','custom-header':'1234'}
 msg.body = "hello queue a"
-print "2. send_message:\n%s\n" % pprint.pformat(msg.pack())
+print("2. send_message:\n%s\n" % pprint.pformat(msg.pack()))
 
 #>>> 'SEND\ncustom-header:1234\ndestination:/queue/a\n\nhello queue a\n\n\x00\n'
 

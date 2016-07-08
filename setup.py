@@ -32,9 +32,7 @@ Classifiers = [
 ]
 
 # Recover the ReStructuredText docs:
-fd = file("README.rst")
-Description = fd.read()
-fd.close()
+Description = open("README.rst").read()
 
 TestSuite = 'stomper.tests'
 
@@ -47,7 +45,7 @@ PackageData = {
 }
 
 
-needed = []
+needed = ['future']
 if sys.version_info < (2, 5):
     needed += [
         'uuid>=1.2',

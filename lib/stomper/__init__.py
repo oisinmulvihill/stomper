@@ -1,4 +1,5 @@
-from stomp_11 import (
+from __future__ import absolute_import
+from .stomp_11 import (
     Engine,
     Frame,
     FrameError,
