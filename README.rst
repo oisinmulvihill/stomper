@@ -15,6 +15,7 @@ Stomper
     - Ian Weller <https://github.com/ianweller>,
     - Daniele Varrazzo <https://github.com/dvarrazzo>
     - Ralph Bean <http://threebean.org>
+    - Lumír 'Frenzy' Balhar <https://github.com/frenzymadness>
 
 
 Introduction
