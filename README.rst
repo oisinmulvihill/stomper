@@ -95,6 +95,12 @@ This is the default version used in stomper version 0.2.x.
 Version History
 ---------------
 
+0.4.0
+~~~~~
+
+Thanks to Lumír 'Frenzy' Balhar (https://github.com/frenzymadness) contributing
+python3 support.
+
 0.3.0
 ~~~~~
 
