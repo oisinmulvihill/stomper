@@ -32,7 +32,7 @@ Classifiers = [
 ]
 
 # Recover the ReStructuredText docs:
-Description = open("README.rst").read()
+Description = open("README.rst", "rb").read().decode("utf-8")
 
 TestSuite = 'stomper.tests'
 
