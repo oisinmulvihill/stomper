@@ -7,7 +7,7 @@ Stomper distutils file.
 """
 import sys
 from setuptools import setup, find_packages
-
+import io
 
 Name = 'stomper'
 ProjectUrl = "https://github.com/oisinmulvihill/stomper"
@@ -32,7 +32,7 @@ Classifiers = [
 ]
 
 # Recover the ReStructuredText docs:
-Description = open("README.rst").read()
+Description = io.open("README.rst", encoding="utf-8").read()
 
 TestSuite = 'stomper.tests'
 
