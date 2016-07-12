@@ -16,6 +16,7 @@ Stomper
     - Daniele Varrazzo <https://github.com/dvarrazzo>
     - Ralph Bean <http://threebean.org>
     - Lumír 'Frenzy' Balhar <https://github.com/frenzymadness>
+    - Ralph Bean (https://github.com/ralphbean)
 
 
 Introduction
@@ -95,6 +96,11 @@ This is the default version used in stomper version 0.2.x.
 
 Version History
 ---------------
+
+0.4.1
+~~~~~
+
+Thanks to Ralph Bean (https://github.com/ralphbean) contributing a fix to setup.py and utf-8 encoding under python3.
 
 0.4.0
 ~~~~~
