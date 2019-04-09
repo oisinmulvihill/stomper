@@ -17,6 +17,7 @@ Stomper
     - Ralph Bean <http://threebean.org>
     - Lumír 'Frenzy' Balhar <https://github.com/frenzymadness>
     - Ralph Bean (https://github.com/ralphbean)
+    - https://github.com/pgajdos
 
 
 Introduction
@@ -125,6 +126,12 @@ This is the default version used in stomper version 0.2.x.
 
 Version History
 ---------------
+
+0.4.3
+~~~~~
+
+Added missing attribution to contributors section and messed up 0.4.2 release
+to new pypi.
 
 0.4.2
 ~~~~~

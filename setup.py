@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 
 Name = 'stomper'
 ProjectUrl = "https://github.com/oisinmulvihill/stomper"
-Version = '0.4.2'
+Version = '0.4.3'
 Author = 'Oisin Mulvihill'
 AuthorEmail = 'oisin.mulvihilli@gmail.com'
 Maintainer = 'Oisin Mulvihill'
