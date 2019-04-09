@@ -71,6 +71,35 @@ messages.
 I've also included ``stompbuffer-rx.py``  and ``stompbuffer-tx.py`` as examples of using
 the new stompbuffer module contributed by Ricky Iacovou.
 
+
+Release Process
+---------------
+
+Submit a pull request with tests if possible. I'll review and submit. All tests
+must pass. I tend to run against python3.7 nowadays. I will then increment the
+version, add attribute and then release to pypi if all is good.
+
+Help Oisin remember the relase process::
+
+  # clean env for release:
+  mkvirtualenv --clear -p python3.7 stomper
+
+  # setup and run all tests:
+  python setup.py develop
+  python setup.py test
+
+  # Build and release to test.pypi.org first:
+  pip install twine
+  python setup.py sdist bdist_wheel
+  twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+  # On success
+  twine upload dist/*
+
+  # Commit any changes and tag the release
+  git tag X.Y.Z
+
+
 Supported STOMP Versions
 ------------------------
 
@@ -96,6 +125,14 @@ This is the default version used in stomper version 0.2.x.
 
 Version History
 ---------------
+
+0.4.2
+~~~~~
+
+Thanks to https://github.com/pgajdos for contributing a fix to include the
+license in the distribution. OM: Added minor fix to support test.pypi.org
+uploading before releasing. Document my release process to help me next time
+around.
 
 0.4.1
 ~~~~~

@@ -11,9 +11,9 @@ from setuptools import setup, find_packages
 
 Name = 'stomper'
 ProjectUrl = "https://github.com/oisinmulvihill/stomper"
-Version = '0.4.1'
+Version = '0.4.2'
 Author = 'Oisin Mulvihill'
-AuthorEmail = 'oisin dot mulvihill at gmail com'
+AuthorEmail = 'oisin.mulvihilli@gmail.com'
 Maintainer = 'Oisin Mulvihill'
 Summary = (
     'This is a transport neutral client implementation '
