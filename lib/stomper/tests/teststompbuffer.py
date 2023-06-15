@@ -76,7 +76,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         self.sb.appendData ( msg2 )
         self.sb.appendData ( msg3 )
         expect = len ( msg1 ) + len ( msg2 ) + len ( msg3 )
-        self.failUnless ( self.sb.bufferLen() == expect )
+        self.assertEqual ( self.sb.bufferLen(), expect )
 
 
     def test002_testBufferAccretionBinary ( self ):
@@ -91,7 +91,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         self.sb.appendData ( msg2 )
         self.sb.appendData ( msg3 )
         expect = len ( msg1 ) + len ( msg2 ) + len ( msg3 )
-        self.failUnless ( self.sb.bufferLen() == expect )
+        self.assertEqual ( self.sb.bufferLen(), expect )
 
 
     def test003_oneCompleteTextMessage ( self ):
@@ -104,7 +104,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         '\n\n' bytes.
         """
         msg = self.putAndGetText()
-        self.failUnless ( messageIsGood )
+        self.assertTrue ( messageIsGood )
 
 
     def test004_oneCompleteBinaryMessage ( self ):
@@ -116,7 +116,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         '\n\n' bytes.
         """
         msg = self.putAndGetBinary()
-        self.failUnless ( messageIsGood ( msg, BINBODY ) )
+        self.assertTrue ( messageIsGood ( msg, BINBODY ) )
 
 
     def test005_emptyBufferText ( self ):
@@ -127,9 +127,9 @@ class StompBufferTestCase ( unittest.TestCase ):
         # Verify that there are no more messages in the buffer.
         msg1 = self.putAndGetText()
         msg2 = self.sb.getOneMessage()
-        self.failUnless ( msg2 is None )
+        self.assertTrue ( msg2 is None )
         # Verify that in fact the buffer is empty.
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test006_emptyBufferBinary ( self ):
@@ -140,9 +140,9 @@ class StompBufferTestCase ( unittest.TestCase ):
         # Verify that there are no more messages in the buffer.
         msg1 = self.putAndGetBinary()
         msg2 = self.sb.getOneMessage()
-        self.failUnless ( msg2 is None )
+        self.assertTrue ( msg2 is None )
         # Verify that in fact the buffer is empty.
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test007_messageFragmentsText ( self ):
@@ -155,11 +155,11 @@ class StompBufferTestCase ( unittest.TestCase ):
         fragment2 = msg [20:]
         self.sb.appendData ( fragment1 )
         m = self.sb.getOneMessage()
-        self.failUnless ( m is None )
+        self.assertTrue ( m is None )
         self.sb.appendData ( fragment2 )
         m = self.sb.getOneMessage()
-        self.failIf ( m is None )
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertFalse ( m is None )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test008_messageFragmentsBinary ( self ):
@@ -172,11 +172,11 @@ class StompBufferTestCase ( unittest.TestCase ):
         fragment2 = msg [20:]
         self.sb.appendData ( fragment1 )
         m = self.sb.getOneMessage()
-        self.failUnless ( m is None )
+        self.assertTrue ( m is None )
         self.sb.appendData ( fragment2 )
         m = self.sb.getOneMessage()
-        self.failIf ( m is None )
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertFalse ( m is None )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test009_confusingMessage ( self ):
@@ -190,15 +190,15 @@ class StompBufferTestCase ( unittest.TestCase ):
         self.sb.appendData ( msg )
         m = self.sb.getOneMessage()
         # Ensure the headers weren't mangled
-        self.failUnless ( m [ 'cmd' ] == CMD )
-        self.failUnless ( m [ 'headers' ] [ 'destination' ] == DEST )
+        self.assertEqual ( m [ 'cmd' ], CMD )
+        self.assertEqual ( m [ 'headers' ] [ 'destination' ], DEST )
         # Ensure the body wasn't mangled.
-        self.failUnless ( m [ 'body' ] == body )
+        self.assertTrue ( m [ 'body' ] == body )
         # But ensure that there isn't object identity going on behind the
         # scenes.
-        self.failIf ( m [ 'body' ] is body )
+        self.assertFalse ( m [ 'body' ] is body )
         # Ensure the message was consumed in its entirety.
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test010_syncBufferNoClobber ( self ):
@@ -208,7 +208,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         """
         self.sb.buffer = 'BLAHBLAH'
         self.sb.syncBuffer()
-        self.failUnless ( self.sb.buffer == "BLAHBLAH" )
+        self.assertEqual ( self.sb.buffer, "BLAHBLAH" )
 
         
     def test011_syncBufferClobberEverything ( self ):
@@ -218,7 +218,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         """
         self.sb.buffer = 'rubbish\nmorerubbish'
         self.sb.syncBuffer()
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
         
     def test012_syncBufferClobberRubbish ( self ):
@@ -229,7 +229,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         """
         self.sb.buffer = 'rubbish\x00\nREMAINDER'
         self.sb.syncBuffer()
-        self.failUnless ( self.sb.buffer == "REMAINDER" )
+        self.assertEqual ( self.sb.buffer, "REMAINDER" )
 
         
     def test013_syncBufferClobberEverythingTwice ( self ):
@@ -241,7 +241,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         """
         self.sb.buffer = 'rubbish\x00\nNOTACOMMAND\n'
         self.sb.syncBuffer()
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
         
     def test014_syncBufferGetGoodMessage ( self ):
@@ -253,7 +253,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         self.sb.buffer = 'rubbish\x00\n%s' % ( msg, )
         self.sb.syncBuffer()
         m = self.sb.getOneMessage()
-        self.failUnless ( messageIsGood ( m ) )
+        self.assertTrue ( messageIsGood ( m ) )
 
 
     def test015_syncBufferClobberGoodMessage ( self ):
@@ -265,7 +265,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         msg = makeTextMessage()
         self.sb.buffer = 'rubbish\n%s' % ( msg, )
         self.sb.syncBuffer()
-        self.failUnless ( self.sb.bufferIsEmpty() )
+        self.assertTrue ( self.sb.bufferIsEmpty() )
 
 
     def test016_syncBufferHandleEmbeddedNulls ( self ):
@@ -281,7 +281,7 @@ class StompBufferTestCase ( unittest.TestCase ):
         self.sb.buffer = 'rubbish\x00\nmorerubbish\x00\n%s' % ( msg, )
         self.sb.syncBuffer()
         m = self.sb.getOneMessage()
-        self.failUnless ( messageIsGood ( m ) )
+        self.assertTrue ( messageIsGood ( m ) )
 
     def test017_testAllCommands ( self ):
         # Intentionally NOT using stomper.VALID_COMMANDS
@@ -291,8 +291,8 @@ class StompBufferTestCase ( unittest.TestCase ):
             msg = makeTextMessage ( body = BODY, cmd = cmd )
             self.sb.appendData ( msg )
             m = self.sb.getOneMessage()
-            self.failUnless ( messageIsGood ( m, BODY, cmd ) )
-            self.failUnless ( self.sb.bufferIsEmpty() )
+            self.assertTrue ( messageIsGood ( m, BODY, cmd ) )
+            self.assertTrue ( self.sb.bufferIsEmpty() )
 
         
 if __name__ == "__main__":
