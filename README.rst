@@ -17,7 +17,7 @@ Stomper
     - Ralph Bean <http://threebean.org>
     - Lumír 'Frenzy' Balhar <https://github.com/frenzymadness>
     - Ralph Bean (https://github.com/ralphbean)
-
+    - Petr Viktorin (https://github.com/encukou)
 
 Introduction
 ------------
@@ -76,13 +76,13 @@ Release Process
 ---------------
 
 Submit a pull request with tests if possible. I'll review and submit. All tests
-must pass. I tend to run against python3.7 nowadays. I will then increment the
+must pass. I tend to run against python 3.10+ nowadays. I will then increment the
 version, add attribute and then release to pypi if all is good.
 
 Help Oisin remember the relase process::
 
   # clean env for release:
-  mkvirtualenv --clear -p python3.7 stomper
+  mkvirtualenv --clear -p python3 stomper
 
   # setup and run all tests:
   python setup.py develop
@@ -125,6 +125,14 @@ This is the default version used in stomper version 0.2.x.
 
 Version History
 ---------------
+
+0.4.3
+~~~~~
+
+- Thanks to Petr Viktorin (https://github.com/encukou) for removing deprecated
+unittest methods.
+- I (OM) am just updating the release process to use Github actions to manage
+the test, build and release process.
 
 0.4.2
 ~~~~~
@@ -275,4 +283,3 @@ it along.
 - Added CONNECTED to VALID_COMMANDS so syncBuffer() does not decide these messages are bogus.
 
 - Added new unit test file teststompbuffer which covers the new functionality.
-
